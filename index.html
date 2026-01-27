@@ -46,8 +46,14 @@
         .table { font-size: 0.9rem !important; margin-bottom: 0; }
         .table td, .table th { white-space: nowrap !important; vertical-align: middle; padding: 6px 8px; }
         .name-cell-large { font-size: 0.95rem !important; font-weight: 700; }
-        .name-male { color: #0099ff !important; }
-        .name-female { color: #ff66b3 !important; }
+        
+        /* MODIFICA: ENTRAMBI NERI DI BASE */
+        .name-male, .name-female { color: #212529 !important; font-weight: 700; }
+        
+        /* Classi specifiche per stato tessera nel nome (Sovrascrivono il nero) */
+        .name-expired { color: #dc3545 !important; font-weight: 800 !important; } /* Rosso forte */
+        .name-expiring { color: #fd7e14 !important; font-weight: 800 !important; } /* Arancione scuro */
+
         .highlight-row { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; } 
         .trip-highlight { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; }
         tr.trip-highlight .nominativo-container span.text-uppercase, tr.highlight-row td.text-uppercase { background-color: var(--highlight-name-yellow); box-shadow: 0 0 0 3px var(--highlight-name-yellow); border-radius: 2px; }
@@ -105,43 +111,33 @@
 
         /* MEDIA QUERIES FOR SMARTPHONE ADAPTATION */
         @media (max-width: 991px) {
-            /* Attiva Bottom Nav */
             .bottom-nav { display: flex; }
-            body { padding-bottom: 80px; } /* Spazio per la nav bar */
+            body { padding-bottom: 80px; } 
             
-            /* Header compatto */
             .main-header { padding: 8px 10px; }
             .logo-img { height: 50px; }
             .club-title { font-size: 1rem; }
             .header-actions { justify-content: center; width: 100%; margin-top: 5px; }
-            .header-actions button span { display: none; } /* Nascondi testo bottoni header su mobile, solo icone */
+            .header-actions button span { display: none; } 
             
-            /* Gestione Visibilità Colonne (Tab Logic) */
             .col-mobile-hidden { display: none !important; }
             
-            /* Sposta status cloud sopra la nav bar */
             #cloud-status { bottom: 75px; left: 10px; font-size: 0.7rem; padding: 4px 10px; }
             #save-indicator { bottom: 75px; right: 10px; }
             
-            /* Table adjustments */
             .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .nominativo-container { display: flex; flex-direction: column; }
             .trip-actions-btn { flex-wrap: wrap; }
             
-            /* Form Full Width */
             .col-md-4, .col-md-3, .col-md-2, .col-md-1 { width: 100% !important; }
-            /* Eccezioni per campi piccoli affiancati */
             input[name="prov"], input[name="provResidenza"], input[name="sesso"], input[name="codSic"] { width: 100% !important; }
             
-            /* Piccola griglia interna per date e province per risparmiare spazio verticale */
             #formSoci .row, #formAcc .row { display: flex; flex-wrap: wrap; }
-            /* Esempio: Provincia e Sesso affiancati al 50% */
             .mobile-half { width: 50% !important; flex: 0 0 50%; padding-right: 5px; }
             .mobile-half + .mobile-half { padding-right: 0; padding-left: 5px; }
         }
 
         @media (min-width: 992px) {
-            /* Desktop Layout: Assicura che tutto sia visibile affiancato */
             #col-mobile-soci, #col-mobile-trip { display: block !important; }
         }
     </style>
@@ -158,7 +154,6 @@
             <span class="club-title">CLUB NAPOLI<br>PARTENOPEI MODENA</span>
         </div>
         <div class="header-actions">
-            <!-- Icone con testo nascosto su mobile per risparmiare spazio -->
             <button class="btn btn-light btn-sm" style="background-color: #e0cffc; border-color: #6f42c1;" onclick="downloadSelfContained()" title="Invia App">
                 <i class="fa-solid fa-share-nodes"></i> <span>App</span>
             </button>
@@ -175,10 +170,8 @@
         <div class="row">
             
             <!-- SEZIONE SINISTRA (SOCI & ANAGRAFICA) -->
-            <!-- ID assegnato per la logica dei tab mobile -->
             <div class="col-lg-7 mb-4" id="col-mobile-soci">
                 
-                <!-- CARD ISCRIZIONE SOCI -->
                 <div class="card" id="card-soci-form">
                     <div class="card-header">
                         <span><i class="fa-solid fa-user-plus"></i> Iscrizione Soci</span>
@@ -215,7 +208,6 @@
                     </div>
                 </div>
 
-                <!-- CARD LISTA SOCI -->
                 <div class="card" id="card-soci-list">
                     <div class="card-header">
                         <span><i class="fa-solid fa-users"></i> Elenco Soci <span id="count-soci" class="counter-badge">0</span></span>
@@ -237,7 +229,6 @@
                     </div>
                 </div>
 
-                <!-- CARD ACCOMPAGNATORI (Default chiusa su mobile per risparmiare spazio) -->
                 <div class="card border-secondary" id="card-acc-wrapper">
                     <div class="card-header bg-secondary">
                         <span><i class="fa-solid fa-user-group"></i> Accompagnatori <span id="count-acc" class="counter-badge">0</span></span>
@@ -252,7 +243,6 @@
                                     <div class="col-md-4"><input type="text" class="form-control form-control-sm" name="cognome" placeholder="Cognome" required></div>
                                     <div class="col-md-4 mobile-half"><select class="form-select form-select-sm" name="sesso"><option value="M">M</option><option value="F">F</option></select></div>
                                     <div class="col-md-12 hidden-fields-acc" style="display:none;">
-                                        <!-- Campi nascosti per semplicità visiva, espandibili se necessario nel codice completo -->
                                         <input type="hidden" name="luogo"><input type="hidden" name="prov"><input type="hidden" name="dataNascita"><input type="hidden" name="cf"><input type="hidden" name="residenza"><input type="hidden" name="provResidenza"><input type="hidden" name="tessera"><input type="hidden" name="scadenza"><input type="hidden" name="codSic">
                                     </div>
                                     <div class="col-12 mt-2 d-flex gap-2">
@@ -273,7 +263,6 @@
             <!-- SEZIONE DESTRA (TRASFERTA & ARCHIVIO) -->
             <div class="col-lg-5 mb-4 col-mobile-hidden" id="col-mobile-trip">
                 
-                <!-- CARD TRASFERTA -->
                 <div class="card border-primary shadow-sm" id="card-trip">
                     <div class="card-header bg-primary text-white">
                         <span id="trip-header-title"><i class="fa-solid fa-bus"></i> Trasferta</span>
@@ -296,7 +285,6 @@
                     </div>
                 </div>
 
-                <!-- CARD ARCHIVIO -->
                 <div class="card mt-3 border-dark" id="card-archive">
                     <div class="card-header bg-dark text-white">
                         <span><i class="fa-solid fa-box-archive"></i> Archivio</span>
@@ -311,7 +299,6 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION BAR (VISIBLE ONLY ON MOBILE) -->
     <nav class="bottom-nav">
         <a class="nav-item active" id="tab-soci" onclick="switchMobileTab('soci')">
             <i class="fa-solid fa-users"></i>
@@ -392,15 +379,11 @@
 
         // --- GESTIONE NAVIGAZIONE MOBILE ---
         window.switchMobileTab = function(tabName) {
-            // Rimuovi active da tutti
             document.getElementById('tab-soci').classList.remove('active');
             document.getElementById('tab-trip').classList.remove('active');
-            
-            // Nascondi colonne su mobile
             document.getElementById('col-mobile-soci').classList.add('col-mobile-hidden');
             document.getElementById('col-mobile-trip').classList.add('col-mobile-hidden');
 
-            // Attiva quello giusto
             if(tabName === 'soci') {
                 document.getElementById('tab-soci').classList.add('active');
                 document.getElementById('col-mobile-soci').classList.remove('col-mobile-hidden');
@@ -434,8 +417,6 @@
                 if(!window.appData[type]) window.appData[type] = [];
                 window.appData[type].push(obj);
                 e.target.reset(); if(window.saveDataOnline) window.saveDataOnline();
-                
-                // Su mobile, se aggiungo qualcuno, rimango nel form per aggiungerne altri, non cambio tab
                 alert("Inserito!");
             }
         };
@@ -463,17 +444,27 @@
             list.forEach((item, index) => {
                 const tr = document.createElement('tr');
                 if(item.evidenziato) tr.classList.add('highlight-row'); 
-                const nameClass = item.sesso === 'M' ? 'name-male' : 'name-female';
+                
+                // DEFAULT NERO PER TUTTI (modificato)
+                let nameClass = item.sesso === 'M' ? 'name-male' : 'name-female';
                 
                 let scadenzaHtml = '';
                 if(item.scadenza) {
                     const today = new Date(); today.setHours(0,0,0,0); const exp = new Date(item.scadenza);
-                    let colorClass = 'text-success';
-                    if(exp < today) colorClass = 'text-danger';
-                    else if(exp <= new Date(new Date().setMonth(today.getMonth()+3))) colorClass = 'text-warning';
+                    let colorClass = 'text-success'; // Dot color default
+                    
+                    if(exp < today) {
+                        // SCADUTA
+                        colorClass = 'text-danger';
+                        if(type === 'soci') nameClass = 'name-expired'; // Nome Rosso
+                    }
+                    else if(exp <= new Date(new Date().setMonth(today.getMonth()+3))) {
+                        // IN SCADENZA
+                        colorClass = 'text-warning';
+                        if(type === 'soci') nameClass = 'name-expiring'; // Nome Arancione
+                    }
                     
                     if (type === 'soci') {
-                        // Logica icone stampa
                         let printIcon = '';
                         if (colorClass === 'text-danger') {
                             const isSel = window.appData.printExpired && window.appData.printExpired.includes(item.id);
@@ -504,7 +495,6 @@
                             </div>
                         </td>`;
                 } else {
-                    // Accompagnatori semplificati
                      tr.innerHTML = `
                         <td class="text-center"><button class="btn btn-sm btn-secondary rounded-circle py-0 px-2" onclick="addToTrip('${item.id}', '${type}')">+</button></td>
                         <td class="${nameClass} fw-bold">${item.cognome} ${item.nome}</td>
@@ -533,7 +523,7 @@
                     <td class="fw-bold text-center align-middle">${index + 1}</td>
                     <td>
                         <div class="d-flex flex-column">
-                            <span class="fw-bold text-uppercase ${fullData.sesso === 'F' ? 'text-danger' : 'text-primary'}">${item.cognome} ${item.nome}</span>
+                            <span class="fw-bold text-uppercase text-dark">${item.cognome} ${item.nome}</span>
                             ${item.note ? `<span class="badge bg-warning text-dark text-start text-wrap mt-1"><i class="fa-solid fa-note-sticky"></i> ${item.note}</span>` : ''}
                             <div class="small text-muted mt-1" style="font-size:0.75rem">
                                 ${fullData.luogo||''} ${formatDateIT(fullData.dataNascita)} - ${fullData.tessera ? 'Tess:'+fullData.tessera : ''}
@@ -619,9 +609,7 @@
             window.appData.trasfertaAttiva.push({ tripId: Date.now().toString()+Math.random(), refId: refId, originType: originType, nome: person.nome, cognome: person.cognome, sesso: person.sesso, note: "", highlightColor: "" }); 
             syncToArchiveIfLinked(); 
             if(window.saveDataOnline) window.saveDataOnline(); 
-            // Feedback visivo immediato su mobile
             if(window.innerWidth < 992) {
-                // Opzionale: switchMobileTab('trip'); // Se vuoi che vada subito alla lista bus, scommenta. Altrimenti resta per aggiungerne altri.
                 const countBadge = document.getElementById('trip-count');
                 countBadge.innerText = window.appData.trasfertaAttiva.length;
                 countBadge.classList.add('bg-danger'); setTimeout(()=>countBadge.classList.remove('bg-danger'), 500);
