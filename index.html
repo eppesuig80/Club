@@ -2,21 +2,16 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <!-- 1. VIEWPORT OTTIMIZZATO PER MOBILE -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- 2. CONFIGURAZIONE WEB APP (iOS & Android) -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Club Napoli">
     <meta name="theme-color" content="#122F67">
 
-    <title>Gestione Club Napoli Partenopei Modena</title>
+    <title>Gestione Club Napoli</title>
     
-    <link rel="icon" type="image/png" id="dynamic-favicon" href="">
-    <link rel="apple-touch-icon" id="dynamic-apple-icon" href="">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -24,55 +19,46 @@
 
     <style>
         :root { --napoli-blue: #122F67; --napoli-sky: #4DA8DA; --bg-light: #f4f6f9; --highlight-green: #d1e7dd; --highlight-name-yellow: #fff3cd; }
-        body { background-color: var(--bg-light); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-light); font-family: 'Segoe UI', system-ui, sans-serif; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; }
         
         /* HEADER */
-        .main-header { background-color: var(--napoli-blue); color: white; padding: 15px; padding-top: env(safe-area-inset-top); border-bottom: 5px solid var(--napoli-sky); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; z-index: 1000; }
+        .main-header { 
+            background-color: var(--napoli-blue); color: white; padding: 15px; 
+            padding-top: env(safe-area-inset-top); border-bottom: 5px solid var(--napoli-sky); 
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; z-index: 1000; 
+        }
         .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-img { height: 80px; width: auto; max-width: 120px; border-radius: 50%; border: 3px solid white; background: white; object-fit: contain; }
-        .club-title { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px black; line-height: 1.1; }
+        .logo-img { height: 60px; width: auto; max-width: 100px; border-radius: 50%; border: 2px solid white; background: white; object-fit: contain; }
+        .club-title { font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px black; line-height: 1.1; }
         .header-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
-        .header-actions .btn { padding: 6px 12px; font-size: 0.9rem; }
 
         /* CARDS */
-        .card { border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 20px; border-radius: 12px; overflow: hidden; background: white; transition: all 0.3s ease; }
+        .card { border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-radius: 12px; overflow: hidden; background: white; }
         .card-header { background-color: var(--napoli-blue); color: white; font-weight: 600; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; }
-        .header-btn-group { display: flex; gap: 8px; }
         .btn-napoli { background-color: var(--napoli-sky); color: white; font-weight: bold; border: none; }
         .form-label { font-weight: 600; font-size: 0.85rem; color: var(--napoli-blue); margin-bottom: 2px; }
-        .form-control-sm { border: 1px solid #ced4da; padding: 6px; } 
+        .form-control-sm, .form-select-sm { border: 1px solid #ced4da; padding: 8px; font-size: 16px; /* Evita zoom su iOS */ } 
         
-        /* TABLE STYLES (PC STANDARD) */
-        .table { font-size: 0.95rem !important; }
-        .table td, .table th { white-space: nowrap !important; vertical-align: middle; padding: 8px 10px; }
+        /* TABELLE DEFAULT */
+        .table { font-size: 0.95rem !important; margin-bottom: 0; }
+        .table td, .table th { white-space: nowrap !important; vertical-align: middle; padding: 10px; }
+        
+        /* COLORI NOMI E STATI */
         .name-cell-large { font-size: 1rem !important; font-weight: 700; }
-        
-        /* COLORI NOMI BASE (NERO) */
         .name-male { color: #000000 !important; }
         .name-female { color: #000000 !important; }
         
-        /* NUOVI COLORI STATUS SCADENZA (Sovrascrivono il nero) */
-        .text-expired { color: #dc3545 !important; font-weight: 800; } /* Rosso */
-        .text-expiring { color: #fd7e14 !important; font-weight: 800; } /* Arancione */
+        .text-expired { color: #dc3545 !important; font-weight: 800; } /* Rosso Scaduto */
+        .text-expiring { color: #fd7e14 !important; font-weight: 800; } /* Arancione In Scadenza */
 
         .highlight-row { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; } 
         .trip-highlight { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; }
-        tr.trip-highlight .nominativo-container span.text-uppercase, tr.highlight-row td.text-uppercase { background-color: var(--highlight-name-yellow); box-shadow: 0 0 0 3px var(--highlight-name-yellow); border-radius: 2px; }
-        .data-detail { font-size: 0.85rem !important; color: #444; display: inline-block !important; margin-right: 10px; white-space: nowrap; }
-        .data-detail::after { content: " | "; color: #ccc; margin-left: 10px; }
-        .data-detail:last-child::after { content: ""; }
-
-        /* FULLSCREEN */
-        .card-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; margin: 0 !important; border-radius: 0 !important; padding: 10px; padding-top: env(safe-area-inset-top); overflow: hidden; background-color: white; }
-        .card-fullscreen .table-responsive { max-height: calc(100vh - 120px) !important; }
-        .card-fullscreen #table-trip td:nth-child(2) { display: flex; flex-direction: row; align-items: center; gap: 15px; white-space: nowrap; padding: 15px 10px; }
-        .card-fullscreen #table-trip td:nth-child(2) .nominativo-container { font-size: 1.2rem; margin-right: 15px; min-width: 250px; }
         
-        .trip-actions-btn { display: flex; gap: 5px; justify-content: center; align-items: center; }
+        /* FULLSCREEN PER MODIFICHE */
+        .card-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; margin: 0 !important; border-radius: 0 !important; padding: 10px; padding-top: env(safe-area-inset-top); overflow-y: auto; background-color: white; }
 
-        /* STATUS & ERROR */
-        #error-console { position: fixed; bottom: 0; left: 0; width: 100%; background: #dc3545; color: white; padding: 15px; display: none; z-index: 99999; }
-        
+        /* STATUS */
         #cloud-status { 
             position: fixed; bottom: 20px; left: 20px; 
             padding: 8px 15px; border-radius: 20px; 
@@ -82,97 +68,16 @@
         .status-ok { background-color: #198754; } 
         .status-sync { background-color: #ffc107; color: black !important; } 
         .status-err { background-color: #dc3545; }
-        .status-local { background-color: #6c757d; }
-
-        .counter-badge { background: white; color: var(--napoli-blue); padding: 2px 8px; border-radius: 12px; font-size: 0.9rem; font-weight: bold; }
+        
         #save-indicator { position: fixed; bottom: 20px; right: 20px; background: rgba(25, 135, 84, 0.95); color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; display: none; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); font-size: 1rem; }
 
-        /* --- MOBILE BOTTOM NAV (SOLO SMARTPHONE) --- */
-        .mobile-bottom-nav {
-            display: none; /* Nascosto su PC */
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
-            background: white; border-top: 1px solid #ddd;
-            justify-content: space-around; align-items: center;
-            z-index: 9999; padding-bottom: env(safe-area-inset-bottom);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #666; font-size: 0.75rem; font-weight: 600; width: 33%; height: 100%; border: none; background: none; text-decoration: none;
-        }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 3px; }
-        .nav-item:active { color: var(--napoli-blue); }
-
-        /* --- MEDIA QUERIES PER SMARTPHONE (< 768px) --- */
-        @media (max-width: 768px) {
-            /* 1. Header Compatto */
-            .main-header { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
-            .header-actions { width: 100%; justify-content: center; margin-top: 5px; }
-            
-            /* 2. Attiva Menu in Basso */
-            .mobile-bottom-nav { display: flex; }
-            body { padding-bottom: 80px; } /* Spazio per il menu */
-            #cloud-status { bottom: 80px; left: 10px; font-size: 0.7rem; padding: 5px 10px; } /* Sposta status */
-            
-            /* 3. Input più grandi (anti-zoom iOS) */
-            .form-control-sm, .form-select-sm, .btn-sm { font-size: 16px !important; padding: 10px 8px !important; }
-            
-            /* 4. TRASFORMAZIONE TABELLE IN CARDS */
-            /* Nascondi intestazioni tabella classica */
-            .table thead { display: none; }
-            
-            /* Ogni riga diventa un box */
-            .table tbody tr {
-                display: block;
-                background: white;
-                margin-bottom: 12px;
-                border-radius: 10px;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-                border: 1px solid #eee;
-                padding: 12px;
-                position: relative;
-            }
-
-            .table td {
-                display: block;
-                text-align: left;
-                padding: 4px 0 !important;
-                border: none !important;
-                font-size: 0.95rem;
-                white-space: normal !important; /* Testo a capo */
-            }
-            
-            /* Stili specifici celle mobile */
-            /* Bottone Aggiungi Bus (galleggiante in alto a destra nella card) */
-            .table td:first-child { 
-                position: absolute; top: 10px; right: 10px; width: auto; padding: 0 !important;
-            }
-            .table td:first-child button { width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; }
-
-            /* Numero progressivo (nascondi) */
-            .table td:nth-child(2) { display: none; }
-            
-            /* Nome (Grande e in evidenza) */
-            .name-cell-large { 
-                font-size: 1.2rem !important; 
-                margin-bottom: 8px; 
-                padding-bottom: 8px !important;
-                border-bottom: 1px solid #f0f0f0 !important; 
-                width: 80%; /* Lascia spazio al bottone bus */
-            }
-            
-            /* Azioni (Modifica/Elimina) in fondo alla card */
-            .table td:last-child {
-                margin-top: 10px; padding-top: 10px !important; border-top: 1px dashed #eee !important;
-                display: flex; justify-content: space-between; gap: 5px;
-            }
-            .table td:last-child button { flex: 1; padding: 8px 0; font-size: 1rem; }
-
-            /* Fix per la tabella del Bus (Full Screen) */
-            .card-fullscreen #table-trip td:nth-child(2) { flex-direction: column; align-items: flex-start; gap: 5px; }
-            .card-fullscreen #table-trip td:nth-child(2) .data-detail { display: block !important; border: none; padding: 0; }
-            .trip-actions-btn { justify-content: flex-start; flex-wrap: wrap; gap: 8px; }
-            .trip-actions-btn button { padding: 8px 12px; font-size: 1rem; }
+        /* MEDIA QUERIES PER TABLET E MOBILE */
+        @media (max-width: 991px) {
+            .main-header { flex-direction: column; text-align: center; gap: 10px; }
+            .header-actions { width: 100%; justify-content: center; }
+            .club-title { font-size: 1.2rem; }
+            /* Rendi le tabelle scrollabili orizzontalmente su schermi piccoli per non rompere il layout */
+            .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         }
     </style>
 </head>
@@ -180,7 +85,7 @@
 
     <div id="save-indicator"><i class="fa-solid fa-floppy-disk"></i> Dati Salvati</div>
     <div id="cloud-status" class="status-sync"><i class="fa-solid fa-cloud"></i> Connessione...</div>
-    <div id="error-console"><div class="d-flex justify-content-between"><span><strong>ERRORE:</strong> <span id="error-msg"></span></span><button class="btn btn-sm btn-outline-light" onclick="document.getElementById('error-console').style.display='none'">X</button></div></div>
+    <div id="error-console" style="display:none; position:fixed; bottom:0; width:100%; background:red; color:white; padding:10px; z-index:9999;">Errore</div>
 
     <header class="main-header">
         <div class="logo-area">
@@ -188,22 +93,24 @@
             <span class="club-title">CLUB NAPOLI PARTENOPEI MODENA</span>
         </div>
         <div class="header-actions">
-            <button class="btn btn-light btn-sm" style="background-color: #e0cffc; border-color: #6f42c1; color: #333; font-weight: bold;" onclick="downloadSelfContained()" title="Invia App Completa">
+            <button class="btn btn-light btn-sm" style="background-color: #e0cffc; border-color: #6f42c1; color: #333; font-weight: bold;" onclick="downloadSelfContained()">
                 <i class="fa-solid fa-share-nodes"></i> Condividi App
             </button>
             <input type="file" id="logoInput" accept="image/*" style="display: none;" onchange="importLogo(this)">
             <button class="btn btn-light btn-sm" onclick="document.getElementById('logoInput').click()"><i class="fa-solid fa-image"></i> Logo</button>
             
             <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(this)">
-            <button class="btn btn-warning btn-sm text-dark fw-bold" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-file-import"></i> Importa Backup</button>
-            <button class="btn btn-light btn-sm" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Export JSON</button>
+            <button class="btn btn-warning btn-sm text-dark fw-bold" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-file-import"></i> Importa</button>
+            <button class="btn btn-light btn-sm" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Backup</button>
         </div>
     </header>
 
     <div class="container-fluid mt-4">
         <div class="row">
-            <!-- SINISTRA -->
+            <!-- SINISTRA: SOCI E ACCOMPAGNATORI -->
             <div class="col-lg-7">
+                
+                <!-- CARD FORM SOCI -->
                 <div class="card" id="card-soci-form">
                     <div class="card-header"><span><i class="fa-solid fa-user-plus"></i> Iscrizione Soci <span id="count-soci" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-soci-body')">Mostra/Nascondi</button></div></div>
                     <div class="card-body" id="form-soci-body">
@@ -227,13 +134,13 @@
                     </div>
                 </div>
 
+                <!-- CARD LISTA SOCI -->
                 <div class="card" id="card-soci-list">
                     <div class="card-header">
                         <span><i class="fa-solid fa-users"></i> Lista Soci</span>
                         <div class="header-btn-group">
                             <button class="btn btn-sm btn-danger fw-bold me-1" id="btn-print-expired" style="display:none;" onclick="printExpiredPDF()"><i class="fa-solid fa-print"></i> Scaduti (<span id="expired-count">0</span>)</button>
                             <button class="btn btn-sm btn-warning fw-bold me-1 text-dark" id="btn-print-expiring" style="display:none;" onclick="printExpiringPDF()"><i class="fa-solid fa-print"></i> In Scadenza (<span id="expiring-count">0</span>)</button>
-                            
                             <button class="btn btn-sm btn-outline-light me-1" onclick="exportPDFSoci()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                             <button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-list')"><i class="fa-solid fa-expand"></i></button>
                             <button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-soci-body')">Mostra/Nascondi</button>
@@ -241,10 +148,11 @@
                     </div>
                     <div class="card-body" id="list-soci-body">
                         <div class="input-group input-group-sm mb-2"><span class="input-group-text bg-warning text-dark"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control border-warning" id="search-soci" style="background-color: #fffdf0; font-weight:bold;" placeholder="Cerca nominativo..." onkeyup="globalSearch(this.value)"></div>
-                        <div class="table-responsive" style="max-height: 450px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-hover table-bordered" id="table-soci"><thead class="table-light sticky-top"><tr class="text-center small"><th>Bus</th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
+                        <div class="table-responsive" style="max-height: 450px;"><table class="table table-sm align-middle mb-0 table-hover table-bordered" id="table-soci"><thead class="table-light sticky-top"><tr class="text-center small"><th>Bus</th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
                     </div>
                 </div>
 
+                <!-- CARD ACCOMPAGNATORI -->
                 <div class="card mt-4 border-secondary" id="card-acc-form">
                     <div class="card-header bg-secondary"><span><i class="fa-solid fa-user-group"></i> Iscrizione Accompagnatori <span id="count-acc" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-acc-body')">Mostra/Nascondi</button></div></div>
                     <div class="card-body" id="form-acc-body" style="display:none;">
@@ -277,7 +185,7 @@
                 </div>
             </div>
 
-            <!-- DESTRA -->
+            <!-- DESTRA: BUS E ARCHIVIO -->
             <div class="col-lg-5">
                 <div class="card border-primary" id="card-trip">
                     <div class="card-header bg-primary text-white"><span id="trip-header-title"><i class="fa-solid fa-bus"></i> Gestione Trasferta Bus</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-trip')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('trip-body')">Mostra/Nascondi</button></div></div>
@@ -295,23 +203,7 @@
         </div>
     </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION (Solo su Smartphone) -->
-    <nav class="mobile-bottom-nav">
-        <a href="#card-soci-form" class="nav-item" onclick="toggleSection('form-soci-body')">
-            <i class="fa-solid fa-user-plus"></i>
-            <span>Iscrizione</span>
-        </a>
-        <a href="#card-soci-list" class="nav-item">
-            <i class="fa-solid fa-users"></i>
-            <span>Soci</span>
-        </a>
-        <a href="#card-trip" class="nav-item">
-            <i class="fa-solid fa-bus"></i>
-            <span>Bus</span>
-        </a>
-    </nav>
-
-    <!-- FIREBASE CONFIGURATION -->
+    <!-- FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
