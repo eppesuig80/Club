@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <!-- 1. VIEWPORT OTTIMIZZATO PER MOBILE -->
+    <!-- 1. VIEWPORT OTTIMIZZATO PER MOBILE (Disabilita zoom involontario) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <!-- 2. CONFIGURAZIONE WEB APP (iOS & Android) -->
@@ -27,17 +27,15 @@
         body { background-color: var(--bg-light); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; }
         
         /* HEADER */
-        .main-header { background-color: var(--napoli-blue); color: white; padding: 15px; padding-top: env(safe-area-inset-top); border-bottom: 5px solid var(--napoli-sky); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; z-index: 1000; }
+        .main-header { background-color: var(--napoli-blue); color: white; padding: 12px; padding-top: max(12px, env(safe-area-inset-top)); border-bottom: 5px solid var(--napoli-sky); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; z-index: 1000; }
         .logo-area { display: flex; align-items: center; gap: 15px; }
-        .logo-img { height: 80px; width: auto; max-width: 120px; border-radius: 50%; border: 3px solid white; background: white; object-fit: contain; }
-        .club-title { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px black; line-height: 1.1; }
-        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
-        .header-actions .btn { padding: 6px 12px; font-size: 0.9rem; }
-
+        .logo-img { height: 70px; width: auto; max-width: 100px; border-radius: 50%; border: 3px solid white; background: white; object-fit: contain; }
+        .club-title { font-size: 1.4rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px black; line-height: 1.1; }
+        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 5px; }
+        
         /* CARDS */
-        .card { border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 20px; border-radius: 12px; overflow: hidden; background: white; transition: all 0.3s ease; }
-        .card-header { background-color: var(--napoli-blue); color: white; font-weight: 600; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; }
-        .header-btn-group { display: flex; gap: 8px; }
+        .card { border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 15px; border-radius: 12px; overflow: hidden; background: white; }
+        .card-header { background-color: var(--napoli-blue); color: white; font-weight: 600; display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; }
         .btn-napoli { background-color: var(--napoli-sky); color: white; font-weight: bold; border: none; }
         .form-label { font-weight: 600; font-size: 0.85rem; color: var(--napoli-blue); margin-bottom: 2px; }
         .form-control-sm { border: 1px solid #ced4da; padding: 6px; } 
@@ -46,61 +44,74 @@
         .table { font-size: 0.95rem !important; }
         .table td, .table th { white-space: nowrap !important; vertical-align: middle; padding: 8px 10px; }
         
-        /* --- MODIFICA NOMI E COLORI --- */
-        .name-cell-large { font-size: 1rem !important; font-weight: 700; color: #212529; /* Nero Default */ }
-        .name-male { color: inherit !important; } /* Rimosso colore specifico */
-        .name-female { color: inherit !important; } /* Rimosso colore specifico */
-
-        .text-expired { color: #dc3545 !important; font-weight: 800; } /* Rosso Scaduto */
-        .text-expiring { color: #fd7e14 !important; font-weight: 800; } /* Arancione In Scadenza */
+        /* COLORI NOMI */
+        .name-cell-large { font-size: 1rem !important; font-weight: 700; color: #212529; }
+        .name-male { color: inherit !important; }
+        .name-female { color: inherit !important; }
+        .text-expired { color: #dc3545 !important; font-weight: 800; }
+        .text-expiring { color: #fd7e14 !important; font-weight: 800; }
 
         .highlight-row { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; } 
         .trip-highlight { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; }
         tr.trip-highlight .nominativo-container span.text-uppercase, tr.highlight-row td.text-uppercase { background-color: var(--highlight-name-yellow); box-shadow: 0 0 0 3px var(--highlight-name-yellow); border-radius: 2px; }
-        .data-detail { font-size: 0.85rem !important; color: #444; display: inline-block !important; margin-right: 10px; white-space: nowrap; }
+        .data-detail { font-size: 0.85rem !important; color: #444; display: inline-block; margin-right: 10px; white-space: nowrap; }
         .data-detail::after { content: " | "; color: #ccc; margin-left: 10px; }
         .data-detail:last-child::after { content: ""; }
 
         /* FULLSCREEN */
-        .card-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; margin: 0 !important; border-radius: 0 !important; padding: 10px; padding-top: env(safe-area-inset-top); overflow: hidden; background-color: white; }
-        .card-fullscreen .table-responsive { max-height: calc(100vh - 120px) !important; }
-        .card-fullscreen #table-trip td:nth-child(2) { display: flex; flex-direction: row; align-items: center; gap: 15px; white-space: nowrap; padding: 15px 10px; }
-        .card-fullscreen #table-trip td:nth-child(2) .nominativo-container { font-size: 1.2rem; margin-right: 15px; min-width: 250px; }
+        .card-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; margin: 0 !important; border-radius: 0 !important; padding: 0 !important; background-color: white; overflow-y: auto; }
+        .card-fullscreen .card-header { padding-top: max(15px, env(safe-area-inset-top)); position: sticky; top: 0; z-index: 10; }
+        .card-fullscreen .card-body { padding: 10px; padding-bottom: 50px; }
         
-        .trip-actions-btn { display: flex; gap: 5px; justify-content: center; align-items: center; }
+        .trip-actions-btn { display: flex; gap: 4px; justify-content: center; align-items: center; flex-wrap: wrap; }
 
         /* STATUS & ERROR */
         #error-console { position: fixed; bottom: 0; left: 0; width: 100%; background: #dc3545; color: white; padding: 15px; display: none; z-index: 99999; }
-        
-        #cloud-status { 
-            position: fixed; bottom: 20px; left: 20px; 
-            padding: 8px 15px; border-radius: 20px; 
-            font-weight: bold; z-index: 2000; font-size: 0.8rem; color: white; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: all 0.3s; 
-        }
+        #cloud-status { position: fixed; bottom: 20px; left: 20px; padding: 8px 15px; border-radius: 20px; font-weight: bold; z-index: 2000; font-size: 0.8rem; color: white; box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: all 0.3s; }
         .status-ok { background-color: #198754; } 
         .status-sync { background-color: #ffc107; color: black !important; } 
         .status-err { background-color: #dc3545; }
-        .status-local { background-color: #6c757d; } /* Grigio per modo locale */
-
         .counter-badge { background: white; color: var(--napoli-blue); padding: 2px 8px; border-radius: 12px; font-size: 0.9rem; font-weight: bold; }
-        .archive-count-badge { background-color: #000; color: #fff; padding: 2px 6px; border-radius: 6px; font-size: 0.8rem; margin-left: 8px; font-weight: bold; }
-
-        /* Salvataggio Popup */
         #save-indicator { position: fixed; bottom: 20px; right: 20px; background: rgba(25, 135, 84, 0.95); color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; display: none; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); font-size: 1rem; }
 
-        /* --- MODIFICA MOBILE OTTIMIZZATA --- */
+        /* --- OTTIMIZZAZIONE SMARTPHONE AVANZATA --- */
         @media (max-width: 768px) {
-            .main-header { flex-direction: column; align-items: center; text-align: center; }
-            .header-actions { width: 100%; justify-content: center; margin-top: 15px; }
+            /* Header compatto ma funzionale */
+            .main-header { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+            .logo-area { flex-direction: column; gap: 5px; }
+            .club-title { font-size: 1.2rem; }
             
-            /* Tabelle più leggibili al tocco */
-            .table td, .table th { padding: 12px 8px !important; } 
-            .name-cell-large { font-size: 1.1rem !important; } /* Nomi più grandi */
-
-            .card-fullscreen #table-trip td:nth-child(2) { flex-direction: column; align-items: flex-start; gap: 5px; }
-            .card-fullscreen #table-trip td:nth-child(2) .data-detail { display: block !important; border: none; padding: 0; }
+            /* Griglia pulsanti header per tocco facile */
+            .header-actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+            .header-actions .btn { width: 100%; padding: 8px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 5px; }
+            
+            /* Card a tutto schermo */
+            .container-fluid { padding-left: 8px; padding-right: 8px; }
+            .card { margin-bottom: 15px; border-radius: 8px; }
+            
+            /* Input e Form più grandi per evitare zoom iOS e migliorare tocco */
+            .form-control-sm, .form-select-sm, .btn-sm { font-size: 16px !important; padding: 10px 8px !important; }
+            .form-label { font-size: 0.9rem; margin-top: 5px; }
+            
+            /* Tabelle ottimizzate */
+            .table-responsive { max-height: 400px; border: 1px solid #eee; }
+            .table td, .table th { padding: 12px 6px !important; white-space: normal !important; font-size: 0.9rem !important; }
+            .name-cell-large { font-size: 1.1rem !important; display: block; min-width: 140px; }
+            
+            /* Pulsanti azioni nella tabella più grandi */
+            .action-btn { padding: 8px 12px !important; font-size: 1.1rem !important; margin: 2px; }
+            
+            /* Vista Trasferta Mobile */
+            .card-fullscreen #table-trip td:nth-child(2) { flex-direction: column; align-items: flex-start; gap: 4px; }
+            .card-fullscreen #table-trip td:nth-child(2) .data-detail { display: block !important; border: none; padding: 0; color: #666; font-size: 0.85rem; }
             .card-fullscreen #table-trip td:nth-child(2) .data-detail::after { content: ""; }
+            
+            /* Bottoni strumenti bus impilati o griglia */
+            .trip-actions-btn { gap: 8px; justify-content: flex-start; }
+            .trip-actions-btn button { padding: 8px 12px; font-size: 1rem; }
+            
+            /* Nascondi colonne meno utili se necessario, o lascia scroll orizzontale */
+            /* .table td:nth-child(4), .table th:nth-child(4) { display: none; } Esempio: nascondi nascita */
         }
     </style>
 </head>
@@ -116,40 +127,41 @@
             <span class="club-title">CLUB NAPOLI PARTENOPEI MODENA</span>
         </div>
         <div class="header-actions">
-            <button class="btn btn-light btn-sm" style="background-color: #e0cffc; border-color: #6f42c1; color: #333; font-weight: bold;" onclick="downloadSelfContained()" title="Invia App Completa">
-                <i class="fa-solid fa-share-nodes"></i> Condividi App
+            <!-- Pulsanti ottimizzati per griglia mobile -->
+            <button class="btn btn-light btn-sm" style="background-color: #e0cffc; border-color: #6f42c1; color: #333; font-weight: bold;" onclick="downloadSelfContained()">
+                <i class="fa-solid fa-share-nodes"></i> Condividi
             </button>
             <input type="file" id="logoInput" accept="image/*" style="display: none;" onchange="importLogo(this)">
             <button class="btn btn-light btn-sm" onclick="document.getElementById('logoInput').click()"><i class="fa-solid fa-image"></i> Logo</button>
             
             <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(this)">
-            <button class="btn btn-warning btn-sm text-dark fw-bold" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-file-import"></i> Importa Backup</button>
-            <button class="btn btn-light btn-sm" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Export JSON</button>
+            <button class="btn btn-warning btn-sm text-dark fw-bold" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-file-import"></i> Importa</button>
+            <button class="btn btn-light btn-sm" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Backup</button>
         </div>
     </header>
 
-    <div class="container-fluid mt-4">
+    <div class="container-fluid mt-3">
         <div class="row">
             <!-- SINISTRA -->
             <div class="col-lg-7">
                 <div class="card" id="card-soci-form">
-                    <div class="card-header"><span><i class="fa-solid fa-user-plus"></i> Iscrizione Soci <span id="count-soci" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-soci-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-header"><span><i class="fa-solid fa-user-plus"></i> Iscrizione Soci <span id="count-soci" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-soci-body')">Mostra</button></div></div>
                     <div class="card-body" id="form-soci-body">
                         <form id="formSoci" onsubmit="handleFormSubmit(event, 'soci')">
                             <div class="row g-2">
-                                <div class="col-md-4"><label class="form-label">Nome</label><input type="text" class="form-control form-control-sm" name="nome" required></div>
-                                <div class="col-md-4"><label class="form-label">Cognome</label><input type="text" class="form-control form-control-sm" name="cognome" required></div>
-                                <div class="col-md-4"><label class="form-label">Sesso</label><select class="form-select form-select-sm select-sex" name="sesso" onchange="updateSexColor(this)"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
-                                <div class="col-md-3"><label class="form-label">Nascita (Luogo)</label><input type="text" class="form-control form-control-sm" name="luogo"></div>
-                                <div class="col-md-2"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="prov"></div>
-                                <div class="col-md-3"><label class="form-label">Data Nascita</label><input type="date" class="form-control form-control-sm" name="dataNascita"></div>
-                                <div class="col-md-4"><label class="form-label">Codice Fiscale</label><input type="text" class="form-control form-control-sm" name="cf"></div>
-                                <div class="col-md-3"><label class="form-label">Residenza</label><input type="text" class="form-control form-control-sm" name="residenza"></div>
-                                <div class="col-md-1"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="provResidenza" maxlength="2" style="text-transform:uppercase;"></div>
-                                <div class="col-md-3"><label class="form-label">N° Tessera</label><input type="text" class="form-control form-control-sm" name="tessera"></div>
-                                <div class="col-md-3"><label class="form-label">Scadenza</label><input type="date" class="form-control form-control-sm" name="scadenza"></div>
-                                <div class="col-md-2"><label class="form-label">Cod/Sic</label><input type="text" class="form-control form-control-sm" name="codSic"></div>
-                                <div class="col-md-12 d-flex gap-2 align-items-end mt-3"><button type="submit" id="btn-submit-soci" class="btn btn-napoli btn-sm flex-grow-1">Inserisci</button><button type="button" id="btn-cancel-soci" class="btn btn-secondary btn-sm" style="display:none;" onclick="cancelEdit('soci')">Annulla</button></div>
+                                <div class="col-6 col-md-4"><label class="form-label">Nome</label><input type="text" class="form-control form-control-sm" name="nome" required></div>
+                                <div class="col-6 col-md-4"><label class="form-label">Cognome</label><input type="text" class="form-control form-control-sm" name="cognome" required></div>
+                                <div class="col-6 col-md-4"><label class="form-label">Sesso</label><select class="form-select form-select-sm select-sex" name="sesso" onchange="updateSexColor(this)"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
+                                <div class="col-6 col-md-3"><label class="form-label">Nascita (Luogo)</label><input type="text" class="form-control form-control-sm" name="luogo"></div>
+                                <div class="col-4 col-md-2"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="prov"></div>
+                                <div class="col-8 col-md-3"><label class="form-label">Data Nascita</label><input type="date" class="form-control form-control-sm" name="dataNascita"></div>
+                                <div class="col-12 col-md-4"><label class="form-label">Codice Fiscale</label><input type="text" class="form-control form-control-sm" name="cf"></div>
+                                <div class="col-8 col-md-3"><label class="form-label">Residenza</label><input type="text" class="form-control form-control-sm" name="residenza"></div>
+                                <div class="col-4 col-md-1"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="provResidenza" maxlength="2" style="text-transform:uppercase;"></div>
+                                <div class="col-6 col-md-3"><label class="form-label">N° Tessera</label><input type="text" class="form-control form-control-sm" name="tessera"></div>
+                                <div class="col-6 col-md-3"><label class="form-label">Scadenza</label><input type="date" class="form-control form-control-sm" name="scadenza"></div>
+                                <div class="col-12 col-md-2"><label class="form-label">Cod/Sic</label><input type="text" class="form-control form-control-sm" name="codSic"></div>
+                                <div class="col-12 d-flex gap-2 align-items-end mt-3"><button type="submit" id="btn-submit-soci" class="btn btn-napoli btn-sm flex-grow-1 py-2">Inserisci Socio</button><button type="button" id="btn-cancel-soci" class="btn btn-secondary btn-sm py-2" style="display:none;" onclick="cancelEdit('soci')">Annulla</button></div>
                             </div>
                         </form>
                     </div>
@@ -159,48 +171,47 @@
                     <div class="card-header">
                         <span><i class="fa-solid fa-users"></i> Lista Soci</span>
                         <div class="header-btn-group">
-                            <button class="btn btn-sm btn-danger fw-bold me-1" id="btn-print-expired" style="display:none;" onclick="printExpiredPDF()"><i class="fa-solid fa-print"></i> Scaduti (<span id="expired-count">0</span>)</button>
-                            <button class="btn btn-sm btn-warning fw-bold me-1 text-dark" id="btn-print-expiring" style="display:none;" onclick="printExpiringPDF()"><i class="fa-solid fa-print"></i> In Scadenza (<span id="expiring-count">0</span>)</button>
-                            
+                            <button class="btn btn-sm btn-danger fw-bold me-1" id="btn-print-expired" style="display:none;" onclick="printExpiredPDF()"><i class="fa-solid fa-print"></i> (<span id="expired-count">0</span>)</button>
+                            <button class="btn btn-sm btn-warning fw-bold me-1 text-dark" id="btn-print-expiring" style="display:none;" onclick="printExpiringPDF()"><i class="fa-solid fa-print"></i> (<span id="expiring-count">0</span>)</button>
                             <button class="btn btn-sm btn-outline-light me-1" onclick="exportPDFSoci()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
                             <button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-list')"><i class="fa-solid fa-expand"></i></button>
-                            <button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-soci-body')">Mostra/Nascondi</button>
+                            <button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-soci-body')">Mostra</button>
                         </div>
                     </div>
                     <div class="card-body" id="list-soci-body">
-                        <div class="input-group input-group-sm mb-2"><span class="input-group-text bg-warning text-dark"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control border-warning" id="search-soci" style="background-color: #fffdf0; font-weight:bold;" placeholder="Cerca nominativo in tutti gli elenchi..." onkeyup="globalSearch(this.value)"></div>
-                        <div class="table-responsive" style="max-height: 450px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-hover table-bordered" id="table-soci"><thead class="table-light sticky-top"><tr class="text-center small"><th>Bus</th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
+                        <div class="input-group input-group-sm mb-2"><span class="input-group-text bg-warning text-dark"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control border-warning py-2" id="search-soci" style="background-color: #fffdf0; font-weight:bold;" placeholder="Cerca..." onkeyup="globalSearch(this.value)"></div>
+                        <div class="table-responsive" style="max-height: 450px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-hover table-bordered" id="table-soci"><thead class="table-light sticky-top"><tr class="text-center small"><th><i class="fa-solid fa-bus"></i></th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
                     </div>
                 </div>
 
                 <div class="card mt-4 border-secondary" id="card-acc-form">
-                    <div class="card-header bg-secondary"><span><i class="fa-solid fa-user-group"></i> Iscrizione Accompagnatori <span id="count-acc" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-acc-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-header bg-secondary"><span><i class="fa-solid fa-user-group"></i> Accompagnatori <span id="count-acc" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-acc-body')">Mostra</button></div></div>
                     <div class="card-body" id="form-acc-body" style="display:none;">
                         <form id="formAcc" onsubmit="handleFormSubmit(event, 'accompagnatori')">
                             <div class="row g-2">
-                                <div class="col-md-4"><label class="form-label">Nome</label><input type="text" class="form-control form-control-sm" name="nome" required></div>
-                                <div class="col-md-4"><label class="form-label">Cognome</label><input type="text" class="form-control form-control-sm" name="cognome" required></div>
-                                <div class="col-md-4"><label class="form-label">Sesso</label><select class="form-select form-select-sm select-sex" name="sesso" onchange="updateSexColor(this)"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
-                                <div class="col-md-3"><label class="form-label">Nascita (Luogo)</label><input type="text" class="form-control form-control-sm" name="luogo"></div>
-                                <div class="col-md-2"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="prov"></div>
-                                <div class="col-md-3"><label class="form-label">Data Nascita</label><input type="date" class="form-control form-control-sm" name="dataNascita"></div>
-                                <div class="col-md-4"><label class="form-label">Codice Fiscale</label><input type="text" class="form-control form-control-sm" name="cf"></div>
-                                <div class="col-md-3"><label class="form-label">Residenza</label><input type="text" class="form-control form-control-sm" name="residenza"></div>
-                                <div class="col-md-1"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="provResidenza" maxlength="2" style="text-transform:uppercase;"></div>
-                                <div class="col-md-3"><label class="form-label">N° Tessera</label><input type="text" class="form-control form-control-sm" name="tessera"></div>
-                                <div class="col-md-3"><label class="form-label">Scadenza</label><input type="date" class="form-control form-control-sm" name="scadenza"></div>
-                                <div class="col-md-2"><label class="form-label">Cod/Sic</label><input type="text" class="form-control form-control-sm" name="codSic"></div>
-                                <div class="col-md-12 d-flex gap-2 align-items-end mt-3"><button type="submit" id="btn-submit-acc" class="btn btn-secondary btn-sm flex-grow-1">Inserisci</button><button type="button" id="btn-cancel-acc" class="btn btn-outline-secondary btn-sm" style="display:none;" onclick="cancelEdit('accompagnatori')">Annulla</button></div>
+                                <div class="col-6 col-md-4"><label class="form-label">Nome</label><input type="text" class="form-control form-control-sm" name="nome" required></div>
+                                <div class="col-6 col-md-4"><label class="form-label">Cognome</label><input type="text" class="form-control form-control-sm" name="cognome" required></div>
+                                <div class="col-6 col-md-4"><label class="form-label">Sesso</label><select class="form-select form-select-sm select-sex" name="sesso" onchange="updateSexColor(this)"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
+                                <div class="col-6 col-md-3"><label class="form-label">Nascita (Luogo)</label><input type="text" class="form-control form-control-sm" name="luogo"></div>
+                                <div class="col-6 col-md-2"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="prov"></div>
+                                <div class="col-6 col-md-3"><label class="form-label">Data Nascita</label><input type="date" class="form-control form-control-sm" name="dataNascita"></div>
+                                <div class="col-12 col-md-4"><label class="form-label">Codice Fiscale</label><input type="text" class="form-control form-control-sm" name="cf"></div>
+                                <div class="col-8 col-md-3"><label class="form-label">Residenza</label><input type="text" class="form-control form-control-sm" name="residenza"></div>
+                                <div class="col-4 col-md-1"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="provResidenza" maxlength="2" style="text-transform:uppercase;"></div>
+                                <div class="col-6 col-md-3"><label class="form-label">N° Tessera</label><input type="text" class="form-control form-control-sm" name="tessera"></div>
+                                <div class="col-6 col-md-3"><label class="form-label">Scadenza</label><input type="date" class="form-control form-control-sm" name="scadenza"></div>
+                                <div class="col-12 col-md-2"><label class="form-label">Cod/Sic</label><input type="text" class="form-control form-control-sm" name="codSic"></div>
+                                <div class="col-12 d-flex gap-2 align-items-end mt-3"><button type="submit" id="btn-submit-acc" class="btn btn-secondary btn-sm flex-grow-1 py-2">Inserisci Accomp.</button><button type="button" id="btn-cancel-acc" class="btn btn-outline-secondary btn-sm py-2" style="display:none;" onclick="cancelEdit('accompagnatori')">Annulla</button></div>
                             </div>
                         </form>
                     </div>
                 </div>
 
                 <div class="card border-secondary" id="card-acc-list">
-                    <div class="card-header bg-secondary"><span><i class="fa-solid fa-users-viewfinder"></i> Lista Accompagnatori</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-list')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-acc-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-header bg-secondary"><span><i class="fa-solid fa-users-viewfinder"></i> Lista Accomp.</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-list')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-acc-body')">Mostra</button></div></div>
                     <div class="card-body" id="list-acc-body" style="display:none;">
-                        <div class="input-group input-group-sm mb-2"><span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control" id="search-acc" placeholder="Cerca accompagnatore..." onkeyup="globalSearch(this.value)"></div>
-                         <div class="table-responsive" style="max-height: 300px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-bordered" id="table-accompagnatori"><thead class="table-light sticky-top"><tr class="text-center small"><th>Bus</th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
+                        <div class="input-group input-group-sm mb-2"><span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control py-2" id="search-acc" placeholder="Cerca..." onkeyup="globalSearch(this.value)"></div>
+                         <div class="table-responsive" style="max-height: 300px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-bordered" id="table-accompagnatori"><thead class="table-light sticky-top"><tr class="text-center small"><th><i class="fa-solid fa-bus"></i></th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
                     </div>
                 </div>
             </div>
@@ -208,22 +219,22 @@
             <!-- DESTRA -->
             <div class="col-lg-5">
                 <div class="card border-primary" id="card-trip">
-                    <div class="card-header bg-primary text-white"><span id="trip-header-title"><i class="fa-solid fa-bus"></i> Gestione Trasferta Bus</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-trip')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('trip-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-header bg-primary text-white"><span id="trip-header-title"><i class="fa-solid fa-bus"></i> Trasferta Bus</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-trip')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('trip-body')">Mostra</button></div></div>
                     <div class="card-body" id="trip-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded"><h6 class="m-0 text-primary fw-bold">Partecipanti: <span id="trip-count" class="badge bg-primary">0</span></h6><button class="btn btn-warning btn-sm fw-bold" onclick="closeTrip()"><i class="fa-solid fa-box-archive"></i> Archivia / Chiudi</button></div>
-                        <div class="table-responsive border rounded bg-white" style="max-height: 600px; overflow-y: auto;"><table class="table table-sm table-bordered mb-0" id="table-trip"><thead class="table-primary sticky-top" style="z-index: 5;"><tr class="text-center"><th width="8%">N°</th><th>Dati Completi Nominativo</th><th width="25%">Strumenti</th></tr></thead><tbody></tbody></table></div>
-                        <div class="mt-2 text-muted small fst-italic text-center">Usa le icone per: Evidenziare (Verde), Note (Arancione), Posto (Sposta in riga), Modifica nome, Elimina.</div>
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded"><h6 class="m-0 text-primary fw-bold">Partecipanti: <span id="trip-count" class="badge bg-primary">0</span></h6><button class="btn btn-warning btn-sm fw-bold py-2" onclick="closeTrip()"><i class="fa-solid fa-box-archive"></i> Archivia</button></div>
+                        <div class="table-responsive border rounded bg-white" style="max-height: 600px; overflow-y: auto;"><table class="table table-sm table-bordered mb-0" id="table-trip"><thead class="table-primary sticky-top" style="z-index: 5;"><tr class="text-center"><th width="5%">N°</th><th>Dati Nominativo</th><th width="30%">Strumenti</th></tr></thead><tbody></tbody></table></div>
+                        <div class="mt-2 text-muted small fst-italic text-center">Icone: Evidenzia, Note, Posto, Modifica nome, Elimina.</div>
                     </div>
                 </div>
                 <div class="card mt-4 border-dark" id="card-archive">
-                    <div class="card-header bg-dark text-white"><span><i class="fa-solid fa-box-archive"></i> Archivio Trasferte Concluse</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-archive')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('archive-body')">Mostra/Nascondi</button></div></div>
-                    <div class="card-body" id="archive-body" style="display:none;"><ul class="list-group list-group-flush" id="archive-list"></ul><div class="mt-3 text-center" id="empty-archive-msg" style="display:none;"><small class="text-muted">Nessuna trasferta in archivio.</small></div></div>
+                    <div class="card-header bg-dark text-white"><span><i class="fa-solid fa-box-archive"></i> Archivio</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-archive')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('archive-body')">Mostra</button></div></div>
+                    <div class="card-body" id="archive-body" style="display:none;"><ul class="list-group list-group-flush" id="archive-list"></ul><div class="mt-3 text-center" id="empty-archive-msg" style="display:none;"><small class="text-muted">Nessuna trasferta.</small></div></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE CONFIGURATION WITH CORRECT URL -->
+    <!-- FIREBASE CONFIGURATION -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
@@ -294,7 +305,7 @@
         }
     </script>
 
-    <!-- MAIN LOGIC - PUBLIC FUNCTIONS -->
+    <!-- MAIN LOGIC -->
     <script>
         window.appData = { 
             soci: [], 
@@ -344,7 +355,7 @@
             document.getElementById('count-soci').innerText = window.appData.soci ? window.appData.soci.length : 0;
             document.getElementById('count-acc').innerText = window.appData.accompagnatori ? window.appData.accompagnatori.length : 0;
             const tripHeader = document.getElementById('trip-header-title');
-            let title = '<i class="fa-solid fa-bus"></i> Gestione Trasferta';
+            let title = '<i class="fa-solid fa-bus"></i> Trasferta';
             if(window.appData.currentTripInfo && window.appData.currentTripInfo.name) title += `: <span class="text-warning">${window.appData.currentTripInfo.name}</span>`;
             title += ` <button class="btn btn-sm btn-outline-light border-0 ms-2" onclick="renameCurrentTrip()"><i class="fa-solid fa-pen-to-square"></i></button>`;
             if(tripHeader) tripHeader.innerHTML = title;
@@ -352,7 +363,6 @@
             updatePrintButtons();
         };
 
-        // --- RENDER TABLE MODIFICATA (Colori Nomi + Status) ---
         window.renderTable = function(type, filter = "") {
             const tbody = document.querySelector(type === 'soci' ? '#table-soci tbody' : '#table-accompagnatori tbody');
             if(!tbody) return;
@@ -365,12 +375,10 @@
                 const tr = document.createElement('tr');
                 if(item.evidenziato) tr.classList.add('highlight-row'); 
                 
-                // Classi base per struttura (nero di default da CSS)
                 const nameClass = item.sesso === 'M' ? 'name-male' : 'name-female';
                 
-                // LOGICA SEMAFORO E COLORE NOME
                 let scadenzaHtml = '-';
-                let nameColorClass = ""; // Base nero (ereditato)
+                let nameColorClass = ""; 
 
                 if(item.scadenza) {
                     const today = new Date();
@@ -379,25 +387,19 @@
                     
                     let icon = '';
                     if(exp < today) {
-                        // SCADUTA (ROSSO)
                         const isSelected = window.appData.printExpired && window.appData.printExpired.includes(item.id);
                         const iconClass = isSelected ? 'fa-print' : 'fa-circle';
-                        const titleTxt = isSelected ? 'Selezionato per stampa' : 'Clicca per aggiungere alla stampa scaduti';
-                        icon = `<i class="fa-solid ${iconClass} text-danger ms-2" style="cursor:pointer;" onclick="toggleExpiredSelection('${item.id}')" title="${titleTxt}"></i>`;
-                        nameColorClass = "text-expired"; // Nome Rosso
+                        icon = `<i class="fa-solid ${iconClass} text-danger ms-2" style="cursor:pointer;" onclick="toggleExpiredSelection('${item.id}')"></i>`;
+                        nameColorClass = "text-expired"; 
                     } else {
-                        // DATA FUTURA
                         const threeMonths = new Date(); threeMonths.setMonth(today.getMonth() + 3);
                         if(exp <= threeMonths) {
-                            // IN SCADENZA (ARANCIONE)
                             const isSelected = window.appData.printExpiring && window.appData.printExpiring.includes(item.id);
                             const iconClass = isSelected ? 'fa-print' : 'fa-circle';
-                            const titleTxt = isSelected ? 'Selezionato per stampa' : 'Clicca per aggiungere alla stampa in scadenza';
-                            icon = `<i class="fa-solid ${iconClass} text-warning ms-2" style="cursor:pointer;" onclick="toggleExpiringSelection('${item.id}')" title="${titleTxt}"></i>`;
-                            nameColorClass = "text-expiring"; // Nome Arancione
+                            icon = `<i class="fa-solid ${iconClass} text-warning ms-2" style="cursor:pointer;" onclick="toggleExpiringSelection('${item.id}')"></i>`;
+                            nameColorClass = "text-expiring";
                         } else {
-                            // VALIDA (VERDE) - Nome resta Nero
-                            icon = '<i class="fa-solid fa-circle text-success ms-2" title="Valida"></i>';
+                            icon = '<i class="fa-solid fa-circle text-success ms-2"></i>';
                         }
                     }
                     scadenzaHtml = formatDateIT(item.scadenza) + icon;
@@ -433,14 +435,13 @@
                 else if(window.appData.accompagnatori) fullData = window.appData.accompagnatori.find(a => a.id === item.refId) || {};
                 const tr = document.createElement('tr');
                 if(item.highlightColor === 'green') tr.classList.add('trip-highlight');
-                // Nomi in bus restano neri (o ereditano)
                 const sesso = item.sesso || fullData.sesso || 'M';
                 const nameClass = sesso === 'M' ? 'name-male' : 'name-female';
                 tr.innerHTML = `
                     <td class="fw-bold text-center align-middle">${index + 1}</td>
                     <td>
                         <div class="nominativo-container">
-                            <span class="${nameClass} text-uppercase">${item.cognome} ${item.nome}</span>
+                            <span class="${nameClass} text-uppercase fw-bold">${item.cognome} ${item.nome}</span>
                             ${item.note ? `<span class="text-danger fw-bold ms-2 small">(${item.note})</span>` : ''}
                         </div>
                         <div class="data-detail">Nato: ${fullData.luogo || ''} (${fullData.prov || ''}) - ${formatDateIT(fullData.dataNascita)}</div>
@@ -494,7 +495,7 @@
         function updateAppIcons(base64) { document.getElementById('dynamic-favicon').href = base64; document.getElementById('dynamic-apple-icon').href = base64; }
 
         window.deleteMember = function(id, type) { if(confirm("Eliminare definitivamente?")) { window.appData[type] = window.appData[type].filter(m => m.id !== id); window.appData.trasfertaAttiva = window.appData.trasfertaAttiva.filter(t => t.refId !== id); syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline(); } };
-        window.loadMemberForEdit = function(id, type) { const item = window.appData[type].find(m => m.id === id); if(!item) return; document.getElementById(type === 'soci' ? 'form-soci-body' : 'form-acc-body').style.display = 'block'; const cardId = type === 'soci' ? 'card-soci-form' : 'card-acc-form'; document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(cardId).classList.add('editing-mode'); const form = document.getElementById(type === 'soci' ? 'formSoci' : 'formAcc'); for (const key in item) { if (form.elements[key]) { form.elements[key].value = item[key]; if(key === 'sesso' && form.elements[key].tagName === 'SELECT') updateSexColor(form.elements[key]); } } editState = { isEditing: true, id: id, type: type }; const btnSubmit = document.getElementById(type === 'soci' ? 'btn-submit-soci' : 'btn-submit-acc'); btnSubmit.innerText = "Salva Modifiche"; btnSubmit.classList.add('btn-warning'); document.getElementById(type === 'soci' ? 'btn-cancel-soci' : 'btn-cancel-acc').style.display = 'inline-block'; };
+        window.loadMemberForEdit = function(id, type) { const item = window.appData[type].find(m => m.id === id); if(!item) return; document.getElementById(type === 'soci' ? 'form-soci-body' : 'form-acc-body').style.display = 'block'; const cardId = type === 'soci' ? 'card-soci-form' : 'card-acc-form'; document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(cardId).classList.add('editing-mode'); const form = document.getElementById(type === 'soci' ? 'formSoci' : 'formAcc'); for (const key in item) { if (form.elements[key]) { form.elements[key].value = item[key]; if(key === 'sesso' && form.elements[key].tagName === 'SELECT') updateSexColor(form.elements[key]); } } editState = { isEditing: true, id: id, type: type }; const btnSubmit = document.getElementById(type === 'soci' ? 'btn-submit-soci' : 'btn-submit-acc'); btnSubmit.innerText = "Salva"; btnSubmit.classList.add('btn-warning'); document.getElementById(type === 'soci' ? 'btn-cancel-soci' : 'btn-cancel-acc').style.display = 'inline-block'; };
         window.cancelEdit = function(type) { document.getElementById(type === 'soci' ? 'formSoci' : 'formAcc').reset(); editState = { isEditing: false, id: null, type: null }; const cardId = type === 'soci' ? 'card-soci-form' : 'card-acc-form'; document.getElementById(cardId).classList.remove('editing-mode'); const btnSubmit = document.getElementById(type === 'soci' ? 'btn-submit-soci' : 'btn-submit-acc'); btnSubmit.innerText = "Inserisci"; btnSubmit.classList.remove('btn-warning'); document.getElementById(type === 'soci' ? 'btn-cancel-soci' : 'btn-cancel-acc').style.display = 'none'; };
         window.toggleHighlight = function(id, type) { const item = window.appData[type].find(m => m.id === id); if(item) { item.evidenziato = !item.evidenziato; if(window.saveDataOnline) window.saveDataOnline(); } };
         window.addToTrip = function(refId, originType) { const person = window.appData[originType].find(p => p.id === refId); if(!person) return; if(window.appData.trasfertaAttiva.some(t => t.refId === refId)) { alert("Già presente!"); return; } window.appData.trasfertaAttiva.push({ tripId: Date.now().toString() + Math.random().toString(), refId: refId, originType: originType, nome: person.nome, cognome: person.cognome, sesso: person.sesso, note: "", highlightColor: "", location: "" }); syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline(); };
