@@ -2,15 +2,17 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <!-- 1. VIEWPORT OTTIMIZZATO PER MOBILE -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
+    <!-- 2. CONFIGURAZIONE WEB APP (iOS & Android) -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Club Napoli">
     <meta name="theme-color" content="#122F67">
 
-    <title>Club Napoli Gestione</title>
+    <title>Gestione Club Napoli Partenopei Modena</title>
     
     <link rel="icon" type="image/png" id="dynamic-favicon" href="">
     <link rel="apple-touch-icon" id="dynamic-apple-icon" href="">
@@ -21,599 +23,589 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
 
     <style>
-        :root { 
-            --napoli-blue: #122F67; 
-            --napoli-sky: #4DA8DA; 
-            --bg-light: #f4f6f9; 
-            --nav-height-mobile: 65px;
-            --header-height: 60px;
-        }
+        :root { --napoli-blue: #122F67; --napoli-sky: #4DA8DA; --bg-light: #f4f6f9; --highlight-green: #d1e7dd; --highlight-name-yellow: #fff3cd; }
+        body { background-color: var(--bg-light); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-bottom: 80px; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            background-color: var(--bg-light); 
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-        }
+        /* HEADER */
+        .main-header { background-color: var(--napoli-blue); color: white; padding: 15px; padding-top: env(safe-area-inset-top); border-bottom: 5px solid var(--napoli-sky); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; box-shadow: 0 4px 6px rgba(0,0,0,0.2); position: relative; z-index: 1000; }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-img { height: 80px; width: auto; max-width: 120px; border-radius: 50%; border: 3px solid white; background: white; object-fit: contain; }
+        .club-title { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 2px black; line-height: 1.1; }
+        .header-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+        .header-actions .btn { padding: 6px 12px; font-size: 0.9rem; }
 
-        /* --- HEADER COMUNE --- */
-        .main-header { 
-            position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
-            background-color: var(--napoli-blue); color: white; 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 20px; z-index: 1030; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            padding-top: env(safe-area-inset-top);
-            height: calc(var(--header-height) + env(safe-area-inset-top));
-        }
-        .logo-area { display: flex; align-items: center; gap: 12px; }
-        .logo-img { height: 42px; width: 42px; border-radius: 50%; border: 2px solid white; background: white; object-fit: contain; }
-        .club-title { font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; font-size: 1.1rem; }
+        /* CARDS */
+        .card { border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.08); margin-bottom: 20px; border-radius: 12px; overflow: hidden; background: white; transition: all 0.3s ease; }
+        .card-header { background-color: var(--napoli-blue); color: white; font-weight: 600; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; }
+        .header-btn-group { display: flex; gap: 8px; }
+        .btn-napoli { background-color: var(--napoli-sky); color: white; font-weight: bold; border: none; }
+        .form-label { font-weight: 600; font-size: 0.85rem; color: var(--napoli-blue); margin-bottom: 2px; }
+        .form-control-sm { border: 1px solid #ced4da; padding: 6px; } 
         
-        /* --- NAVIGAZIONE IBRIDA --- */
-        /* PC: Tabs in alto (sotto header) */
-        .desktop-nav {
-            position: fixed; top: calc(var(--header-height) + env(safe-area-inset-top)); left: 0; right: 0;
-            background: white; border-bottom: 1px solid #ddd;
-            padding: 10px 20px 0 20px; z-index: 1020;
-            display: flex; gap: 5px;
-        }
-        .desktop-tab {
-            padding: 10px 20px; border-radius: 8px 8px 0 0; border: 1px solid transparent;
-            font-weight: 600; color: #555; cursor: pointer; background: #f8f9fa;
-            transition: all 0.2s;
-        }
-        .desktop-tab:hover { background: #e9ecef; }
-        .desktop-tab.active {
-            background: white; color: var(--napoli-blue); border: 1px solid #ddd; border-bottom-color: white;
-            position: relative; top: 1px;
-        }
+        /* TABLE STYLES (PC STANDARD) */
+        .table { font-size: 0.95rem !important; }
+        .table td, .table th { white-space: nowrap !important; vertical-align: middle; padding: 8px 10px; }
+        .name-cell-large { font-size: 1rem !important; font-weight: 700; }
+        
+        /* COLORI NOMI BASE (NERO) */
+        .name-male { color: #000000 !important; }
+        .name-female { color: #000000 !important; }
+        
+        /* NUOVI COLORI STATUS SCADENZA (Sovrascrivono il nero) */
+        .text-expired { color: #dc3545 !important; font-weight: 800; } /* Rosso */
+        .text-expiring { color: #fd7e14 !important; font-weight: 800; } /* Arancione */
 
-        /* MOBILE: Barra in basso */
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height-mobile);
-            background: white; border-top: 1px solid #ddd;
+        .highlight-row { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; } 
+        .trip-highlight { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; }
+        tr.trip-highlight .nominativo-container span.text-uppercase, tr.highlight-row td.text-uppercase { background-color: var(--highlight-name-yellow); box-shadow: 0 0 0 3px var(--highlight-name-yellow); border-radius: 2px; }
+        .data-detail { font-size: 0.85rem !important; color: #444; display: inline-block !important; margin-right: 10px; white-space: nowrap; }
+        .data-detail::after { content: " | "; color: #ccc; margin-left: 10px; }
+        .data-detail:last-child::after { content: ""; }
+
+        /* FULLSCREEN */
+        .card-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 9999 !important; margin: 0 !important; border-radius: 0 !important; padding: 10px; padding-top: env(safe-area-inset-top); overflow: hidden; background-color: white; }
+        .card-fullscreen .table-responsive { max-height: calc(100vh - 120px) !important; }
+        .card-fullscreen #table-trip td:nth-child(2) { display: flex; flex-direction: row; align-items: center; gap: 15px; white-space: nowrap; padding: 15px 10px; }
+        .card-fullscreen #table-trip td:nth-child(2) .nominativo-container { font-size: 1.2rem; margin-right: 15px; min-width: 250px; }
+        
+        .trip-actions-btn { display: flex; gap: 5px; justify-content: center; align-items: center; }
+
+        /* STATUS & ERROR */
+        #error-console { position: fixed; bottom: 0; left: 0; width: 100%; background: #dc3545; color: white; padding: 15px; display: none; z-index: 99999; }
+        
+        #cloud-status { 
+            position: fixed; bottom: 20px; left: 20px; 
+            padding: 8px 15px; border-radius: 20px; 
+            font-weight: bold; z-index: 2000; font-size: 0.8rem; color: white; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3); transition: all 0.3s; 
+        }
+        .status-ok { background-color: #198754; } 
+        .status-sync { background-color: #ffc107; color: black !important; } 
+        .status-err { background-color: #dc3545; }
+        .status-local { background-color: #6c757d; }
+
+        .counter-badge { background: white; color: var(--napoli-blue); padding: 2px 8px; border-radius: 12px; font-size: 0.9rem; font-weight: bold; }
+        #save-indicator { position: fixed; bottom: 20px; right: 20px; background: rgba(25, 135, 84, 0.95); color: white; padding: 12px 25px; border-radius: 30px; font-weight: bold; display: none; z-index: 2000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); font-size: 1rem; }
+
+        /* --- MOBILE BOTTOM NAV (SOLO SMARTPHONE) --- */
+        .mobile-bottom-nav {
             display: none; /* Nascosto su PC */
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 65px;
+            background: white; border-top: 1px solid #ddd;
             justify-content: space-around; align-items: center;
-            z-index: 1030; padding-bottom: env(safe-area-inset-bottom);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            z-index: 9999; padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
-        .nav-item-mob {
+        .nav-item {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            color: #888; font-size: 0.7rem; font-weight: 600; width: 33%; height: 100%; border: none; background: none;
+            color: #666; font-size: 0.75rem; font-weight: 600; width: 33%; height: 100%; border: none; background: none; text-decoration: none;
         }
-        .nav-item-mob i { font-size: 1.4rem; margin-bottom: 4px; }
-        .nav-item-mob.active { color: var(--napoli-blue); }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 3px; }
+        .nav-item:active { color: var(--napoli-blue); }
 
-        /* --- LAYOUT CONTENT --- */
-        .main-container {
-            margin-top: calc(var(--header-height) + env(safe-area-inset-top) + 20px); /* Base margin */
-            padding-bottom: 20px;
-            max-width: 1600px; margin-left: auto; margin-right: auto;
-        }
-
-        /* --- TABELLE E CARDS (IL CUORE DELL'ADATTAMENTO) --- */
-        .card { border: none; border-radius: 12px; box-shadow: 0 2px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .card-header { background: white; border-bottom: 1px solid #eee; padding: 15px; font-weight: 700; color: var(--napoli-blue); display: flex; justify-content: space-between; align-items: center; }
-
-        .table { --bs-table-bg: transparent; vertical-align: middle; }
-        .table thead th { background-color: #eef2f7; font-size: 0.85rem; text-transform: uppercase; color: #555; font-weight: 700; border-bottom: 2px solid #ddd; }
-        
-        /* Colori nomi e stati */
-        .name-cell { font-weight: 700; color: #000; } /* Nero base */
-        .text-expired { color: #dc3545 !important; font-weight: 800; }
-        .text-expiring { color: #fd7e14 !important; font-weight: 800; }
-        .highlight-row { background-color: var(--highlight-green) !important; border-left: 5px solid #198754 !important; }
-
-        /* --- MEDIA QUERIES: LA MAGIA --- */
-        
-        /* MODALITA' DESKTOP (PC) */
-        @media (min-width: 992px) {
-            .bottom-nav { display: none !important; }
-            .mobile-only { display: none !important; }
-            .desktop-nav { display: flex; }
-            .main-container { margin-top: 130px; padding: 0 30px; } /* Spazio per Header + Tabs */
+        /* --- MEDIA QUERIES PER SMARTPHONE (< 768px) --- */
+        @media (max-width: 768px) {
+            /* 1. Header Compatto */
+            .main-header { flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+            .header-actions { width: 100%; justify-content: center; margin-top: 5px; }
             
-            /* Tabella stile Excel su PC */
-            .table-responsive { overflow: visible; }
-            .data-card-view { display: none; } /* Nasconde vista a card */
-            .table-view { display: table; width: 100%; }
-        }
-
-        /* MODALITA' MOBILE (Smartphone/Tablet piccolo) */
-        @media (max-width: 991px) {
-            .desktop-nav { display: none !important; }
-            .desktop-only { display: none !important; }
-            .bottom-nav { display: flex; }
-            .main-container { margin-top: 80px; padding-bottom: 80px; padding-left: 10px; padding-right: 10px; }
-
-            /* TRASFORMAZIONE TABELLA -> CARDS */
-            .table-view thead { display: none; } /* Via intestazione */
-            .table-view tbody tr {
+            /* 2. Attiva Menu in Basso */
+            .mobile-bottom-nav { display: flex; }
+            body { padding-bottom: 80px; } /* Spazio per il menu */
+            #cloud-status { bottom: 80px; left: 10px; font-size: 0.7rem; padding: 5px 10px; } /* Sposta status */
+            
+            /* 3. Input più grandi (anti-zoom iOS) */
+            .form-control-sm, .form-select-sm, .btn-sm { font-size: 16px !important; padding: 10px 8px !important; }
+            
+            /* 4. TRASFORMAZIONE TABELLE IN CARDS */
+            /* Nascondi intestazioni tabella classica */
+            .table thead { display: none; }
+            
+            /* Ogni riga diventa un box */
+            .table tbody tr {
                 display: block;
                 background: white;
-                border-radius: 12px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.05);
                 margin-bottom: 12px;
-                padding: 15px;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+                border: 1px solid #eee;
+                padding: 12px;
                 position: relative;
-                border: 1px solid #f0f0f0;
             }
-            .table-view td { display: block; padding: 2px 0; border: none; text-align: left; }
+
+            .table td {
+                display: block;
+                text-align: left;
+                padding: 4px 0 !important;
+                border: none !important;
+                font-size: 0.95rem;
+                white-space: normal !important; /* Testo a capo */
+            }
             
-            /* Layout interno Card Mobile */
-            .table-view td:first-child { position: absolute; top: 12px; right: 12px; width: auto; } /* Bottone Add */
-            .table-view td:nth-child(2) { display: none; } /* Numero */
-            .name-cell { font-size: 1.1rem; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 5px; width: 85%; }
-            .table-view td:last-child { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #eee; display: flex; gap: 5px; justify-content: space-between; }
+            /* Stili specifici celle mobile */
+            /* Bottone Aggiungi Bus (galleggiante in alto a destra nella card) */
+            .table td:first-child { 
+                position: absolute; top: 10px; right: 10px; width: auto; padding: 0 !important;
+            }
+            .table td:first-child button { width: 40px; height: 40px; border-radius: 50%; font-size: 1.2rem; }
+
+            /* Numero progressivo (nascondi) */
+            .table td:nth-child(2) { display: none; }
             
-            /* Input grandi per dita */
-            .form-control, .btn { min-height: 44px; font-size: 16px; }
+            /* Nome (Grande e in evidenza) */
+            .name-cell-large { 
+                font-size: 1.2rem !important; 
+                margin-bottom: 8px; 
+                padding-bottom: 8px !important;
+                border-bottom: 1px solid #f0f0f0 !important; 
+                width: 80%; /* Lascia spazio al bottone bus */
+            }
+            
+            /* Azioni (Modifica/Elimina) in fondo alla card */
+            .table td:last-child {
+                margin-top: 10px; padding-top: 10px !important; border-top: 1px dashed #eee !important;
+                display: flex; justify-content: space-between; gap: 5px;
+            }
+            .table td:last-child button { flex: 1; padding: 8px 0; font-size: 1rem; }
+
+            /* Fix per la tabella del Bus (Full Screen) */
+            .card-fullscreen #table-trip td:nth-child(2) { flex-direction: column; align-items: flex-start; gap: 5px; }
+            .card-fullscreen #table-trip td:nth-child(2) .data-detail { display: block !important; border: none; padding: 0; }
+            .trip-actions-btn { justify-content: flex-start; flex-wrap: wrap; gap: 8px; }
+            .trip-actions-btn button { padding: 8px 12px; font-size: 1rem; }
         }
-
-        /* Helpers */
-        .section-view { display: none; animation: fadeIn 0.3s; }
-        .section-view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Indicatori */
-        #save-indicator { position: fixed; bottom: 90px; right: 20px; background: #198754; color: white; padding: 10px 20px; border-radius: 30px; display: none; z-index: 2000; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-left: 5px; }
-        .dot-ok { background: #0f0; box-shadow: 0 0 5px #0f0; }
-        .dot-err { background: #f00; }
-        .dot-sync { background: #ff0; }
     </style>
 </head>
 <body>
 
-    <div id="save-indicator"><i class="fa-solid fa-floppy-disk"></i> Salvato</div>
+    <div id="save-indicator"><i class="fa-solid fa-floppy-disk"></i> Dati Salvati</div>
+    <div id="cloud-status" class="status-sync"><i class="fa-solid fa-cloud"></i> Connessione...</div>
+    <div id="error-console"><div class="d-flex justify-content-between"><span><strong>ERRORE:</strong> <span id="error-msg"></span></span><button class="btn btn-sm btn-outline-light" onclick="document.getElementById('error-console').style.display='none'">X</button></div></div>
 
-    <!-- HEADER FISSO -->
     <header class="main-header">
         <div class="logo-area">
             <img src="logo.png" alt="Logo" class="logo-img" id="app-logo" crossorigin="anonymous" onerror="this.onerror=null;this.src='https://cdn-icons-png.flaticon.com/512/10750/10750808.png';"> 
-            <span class="club-title">Club Napoli <span id="status-dot" class="status-dot dot-sync"></span></span>
+            <span class="club-title">CLUB NAPOLI PARTENOPEI MODENA</span>
         </div>
-        <div class="header-actions d-flex gap-2">
-            <button class="btn btn-sm btn-light text-dark fw-bold" onclick="downloadSelfContained()"><i class="fa-solid fa-share-nodes"></i> <span class="desktop-only">App</span></button>
-            <button class="btn btn-sm btn-outline-light" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-upload"></i></button>
-            <button class="btn btn-sm btn-outline-light" onclick="exportData()"><i class="fa-solid fa-download"></i></button>
-            <!-- Inputs Nascosti -->
+        <div class="header-actions">
+            <button class="btn btn-light btn-sm" style="background-color: #e0cffc; border-color: #6f42c1; color: #333; font-weight: bold;" onclick="downloadSelfContained()" title="Invia App Completa">
+                <i class="fa-solid fa-share-nodes"></i> Condividi App
+            </button>
             <input type="file" id="logoInput" accept="image/*" style="display: none;" onchange="importLogo(this)">
+            <button class="btn btn-light btn-sm" onclick="document.getElementById('logoInput').click()"><i class="fa-solid fa-image"></i> Logo</button>
+            
             <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(this)">
+            <button class="btn btn-warning btn-sm text-dark fw-bold" onclick="document.getElementById('importFile').click()"><i class="fa-solid fa-file-import"></i> Importa Backup</button>
+            <button class="btn btn-light btn-sm" onclick="exportData()"><i class="fa-solid fa-file-export"></i> Export JSON</button>
         </div>
     </header>
 
-    <!-- NAVIGATION DESKTOP (TABS IN ALTO) -->
-    <nav class="desktop-nav">
-        <div class="desktop-tab active" onclick="switchView('soci', this)">Soci (<span id="count-soci-d">0</span>)</div>
-        <div class="desktop-tab" onclick="switchView('bus', this)">Trasferta Bus</div>
-        <div class="desktop-tab" onclick="switchView('acc', this)">Accompagnatori</div>
-    </nav>
-
-    <div class="main-container">
-
-        <!-- VIEW 1: SOCI -->
-        <div id="view-soci" class="section-view active">
-            <div class="row g-4">
-                <!-- COLONNA SX: FORM & FILTRI (Sticky su Desktop) -->
-                <div class="col-lg-4">
-                    <div class="card p-3 sticky-lg-top" style="top: 140px; z-index: 10;">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-white"><i class="fa-solid fa-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Cerca socio..." onkeyup="globalSearch(this.value, 'soci')">
-                        </div>
-                        
-                        <button class="btn btn-primary w-100 mb-2" onclick="toggleForm('form-soci-wrapper')"><i class="fa-solid fa-user-plus"></i> Nuovo Socio</button>
-                        
-                        <div id="form-soci-wrapper" style="display:none;" class="bg-light p-3 rounded border mb-3">
-                            <form id="formSoci" onsubmit="handleFormSubmit(event, 'soci')">
-                                <div class="row g-2">
-                                    <div class="col-6"><input type="text" class="form-control" name="nome" placeholder="Nome" required></div>
-                                    <div class="col-6"><input type="text" class="form-control" name="cognome" placeholder="Cognome" required></div>
-                                    <div class="col-6"><select class="form-select" name="sesso"><option value="M">Uomo</option><option value="F">Donna</option></select></div>
-                                    <div class="col-6"><input type="date" class="form-control" name="dataNascita"></div>
-                                    <div class="col-12"><input type="text" class="form-control" name="luogo" placeholder="Luogo Nascita"></div>
-                                    <div class="col-8"><input type="text" class="form-control" name="residenza" placeholder="Residenza"></div>
-                                    <div class="col-4"><input type="text" class="form-control" name="provResidenza" placeholder="PR"></div>
-                                    <div class="col-12"><input type="text" class="form-control" name="cf" placeholder="Codice Fiscale"></div>
-                                    <div class="col-6"><input type="text" class="form-control" name="tessera" placeholder="N° Tessera"></div>
-                                    <div class="col-6"><input type="date" class="form-control" name="scadenza"></div>
-                                    <div class="col-12"><button type="submit" id="btn-submit-soci" class="btn btn-success w-100">Salva</button></div>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button class="btn btn-outline-dark btn-sm" onclick="exportPDFSoci()">Stampa Lista PDF</button>
-                            <button class="btn btn-outline-danger btn-sm" id="btn-exp-soci" style="display:none;" onclick="printExpiredPDF()">Stampa Scaduti</button>
-                            <button class="btn btn-outline-warning text-dark btn-sm" id="btn-ing-soci" style="display:none;" onclick="printExpiringPDF()">Stampa In Scadenza</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- COLONNA DX: LISTA (Tabella su PC, Card su Mobile) -->
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <span>Elenco Soci</span>
-                            <span class="badge bg-primary rounded-pill" id="count-soci">0</span>
-                        </div>
-                        <div class="card-body p-0">
-                            <table class="table table-hover table-view mb-0" id="table-soci">
-                                <thead>
-                                    <tr>
-                                        <th width="50">Add</th>
-                                        <th width="40">#</th>
-                                        <th>Nominativo</th>
-                                        <th>Dati Nascita</th>
-                                        <th>Residenza</th>
-                                        <th>Tessera</th>
-                                        <th>Scadenza</th>
-                                        <th width="120">Azioni</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- VIEW 2: BUS -->
-        <div id="view-bus" class="section-view">
-            <div class="row g-4">
-                <div class="col-lg-8 mx-auto">
-                    <div class="card border-primary">
-                        <div class="card-header bg-primary text-white">
-                            <span id="trip-title"><i class="fa-solid fa-bus"></i> Trasferta Attiva</span>
-                            <div>
-                                <button class="btn btn-sm btn-light text-primary fw-bold me-1" onclick="renameTrip()">Rinomina</button>
-                                <button class="btn btn-sm btn-warning fw-bold" onclick="closeTrip()">Archivia</button>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <!-- SINISTRA -->
+            <div class="col-lg-7">
+                <div class="card" id="card-soci-form">
+                    <div class="card-header"><span><i class="fa-solid fa-user-plus"></i> Iscrizione Soci <span id="count-soci" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-soci-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-body" id="form-soci-body">
+                        <form id="formSoci" onsubmit="handleFormSubmit(event, 'soci')">
+                            <div class="row g-2">
+                                <div class="col-md-4"><label class="form-label">Nome</label><input type="text" class="form-control form-control-sm" name="nome" required></div>
+                                <div class="col-md-4"><label class="form-label">Cognome</label><input type="text" class="form-control form-control-sm" name="cognome" required></div>
+                                <div class="col-md-4"><label class="form-label">Sesso</label><select class="form-select form-select-sm select-sex" name="sesso" onchange="updateSexColor(this)"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
+                                <div class="col-md-3"><label class="form-label">Nascita (Luogo)</label><input type="text" class="form-control form-control-sm" name="luogo"></div>
+                                <div class="col-md-2"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="prov"></div>
+                                <div class="col-md-3"><label class="form-label">Data Nascita</label><input type="date" class="form-control form-control-sm" name="dataNascita"></div>
+                                <div class="col-md-4"><label class="form-label">Codice Fiscale</label><input type="text" class="form-control form-control-sm" name="cf"></div>
+                                <div class="col-md-3"><label class="form-label">Residenza</label><input type="text" class="form-control form-control-sm" name="residenza"></div>
+                                <div class="col-md-1"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="provResidenza" maxlength="2" style="text-transform:uppercase;"></div>
+                                <div class="col-md-3"><label class="form-label">N° Tessera</label><input type="text" class="form-control form-control-sm" name="tessera"></div>
+                                <div class="col-md-3"><label class="form-label">Scadenza</label><input type="date" class="form-control form-control-sm" name="scadenza"></div>
+                                <div class="col-md-2"><label class="form-label">Cod/Sic</label><input type="text" class="form-control form-control-sm" name="codSic"></div>
+                                <div class="col-md-12 d-flex gap-2 align-items-end mt-3"><button type="submit" id="btn-submit-soci" class="btn btn-napoli btn-sm flex-grow-1">Inserisci</button><button type="button" id="btn-cancel-soci" class="btn btn-secondary btn-sm" style="display:none;" onclick="cancelEdit('soci')">Annulla</button></div>
                             </div>
-                        </div>
-                        <div class="bg-light text-center p-2 border-bottom">
-                            <h4 class="m-0 text-primary fw-bold" id="trip-count">0</h4> <small>Partecipanti</small>
-                        </div>
-                        <div class="card-body p-0">
-                            <table class="table table-view mb-0" id="table-trip">
-                                <thead><tr><th width="50">Pos</th><th>Partecipante</th><th>Strumenti</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                            <div id="empty-trip" class="text-center p-4 text-muted">Nessun partecipante in lista.</div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card" id="card-soci-list">
+                    <div class="card-header">
+                        <span><i class="fa-solid fa-users"></i> Lista Soci</span>
+                        <div class="header-btn-group">
+                            <button class="btn btn-sm btn-danger fw-bold me-1" id="btn-print-expired" style="display:none;" onclick="printExpiredPDF()"><i class="fa-solid fa-print"></i> Scaduti (<span id="expired-count">0</span>)</button>
+                            <button class="btn btn-sm btn-warning fw-bold me-1 text-dark" id="btn-print-expiring" style="display:none;" onclick="printExpiringPDF()"><i class="fa-solid fa-print"></i> In Scadenza (<span id="expiring-count">0</span>)</button>
+                            
+                            <button class="btn btn-sm btn-outline-light me-1" onclick="exportPDFSoci()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                            <button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-soci-list')"><i class="fa-solid fa-expand"></i></button>
+                            <button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-soci-body')">Mostra/Nascondi</button>
                         </div>
                     </div>
+                    <div class="card-body" id="list-soci-body">
+                        <div class="input-group input-group-sm mb-2"><span class="input-group-text bg-warning text-dark"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control border-warning" id="search-soci" style="background-color: #fffdf0; font-weight:bold;" placeholder="Cerca nominativo..." onkeyup="globalSearch(this.value)"></div>
+                        <div class="table-responsive" style="max-height: 450px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-hover table-bordered" id="table-soci"><thead class="table-light sticky-top"><tr class="text-center small"><th>Bus</th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
+                    </div>
+                </div>
 
-                    <!-- ARCHIVIO -->
-                    <div class="card mt-4">
-                        <div class="card-header bg-dark text-white">Storico Trasferte <button class="btn btn-sm btn-outline-secondary text-white border-white" onclick="toggleForm('archive-list-box')">Mostra/Nascondi</button></div>
-                        <div class="card-body p-0" id="archive-list-box" style="display:none;">
-                            <ul class="list-group list-group-flush" id="archive-list"></ul>
-                        </div>
+                <div class="card mt-4 border-secondary" id="card-acc-form">
+                    <div class="card-header bg-secondary"><span><i class="fa-solid fa-user-group"></i> Iscrizione Accompagnatori <span id="count-acc" class="counter-badge">0</span></span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-form')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('form-acc-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-body" id="form-acc-body" style="display:none;">
+                        <form id="formAcc" onsubmit="handleFormSubmit(event, 'accompagnatori')">
+                            <div class="row g-2">
+                                <div class="col-md-4"><label class="form-label">Nome</label><input type="text" class="form-control form-control-sm" name="nome" required></div>
+                                <div class="col-md-4"><label class="form-label">Cognome</label><input type="text" class="form-control form-control-sm" name="cognome" required></div>
+                                <div class="col-md-4"><label class="form-label">Sesso</label><select class="form-select form-select-sm select-sex" name="sesso" onchange="updateSexColor(this)"><option value="M">Maschio</option><option value="F">Femmina</option></select></div>
+                                <div class="col-md-3"><label class="form-label">Nascita (Luogo)</label><input type="text" class="form-control form-control-sm" name="luogo"></div>
+                                <div class="col-md-2"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="prov"></div>
+                                <div class="col-md-3"><label class="form-label">Data Nascita</label><input type="date" class="form-control form-control-sm" name="dataNascita"></div>
+                                <div class="col-md-4"><label class="form-label">Codice Fiscale</label><input type="text" class="form-control form-control-sm" name="cf"></div>
+                                <div class="col-md-3"><label class="form-label">Residenza</label><input type="text" class="form-control form-control-sm" name="residenza"></div>
+                                <div class="col-md-1"><label class="form-label">Prov.</label><input type="text" class="form-control form-control-sm" name="provResidenza" maxlength="2" style="text-transform:uppercase;"></div>
+                                <div class="col-md-3"><label class="form-label">N° Tessera</label><input type="text" class="form-control form-control-sm" name="tessera"></div>
+                                <div class="col-md-3"><label class="form-label">Scadenza</label><input type="date" class="form-control form-control-sm" name="scadenza"></div>
+                                <div class="col-md-2"><label class="form-label">Cod/Sic</label><input type="text" class="form-control form-control-sm" name="codSic"></div>
+                                <div class="col-md-12 d-flex gap-2 align-items-end mt-3"><button type="submit" id="btn-submit-acc" class="btn btn-secondary btn-sm flex-grow-1">Inserisci</button><button type="button" id="btn-cancel-acc" class="btn btn-outline-secondary btn-sm" style="display:none;" onclick="cancelEdit('accompagnatori')">Annulla</button></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card border-secondary" id="card-acc-list">
+                    <div class="card-header bg-secondary"><span><i class="fa-solid fa-users-viewfinder"></i> Lista Accompagnatori</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-acc-list')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('list-acc-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-body" id="list-acc-body" style="display:none;">
+                        <div class="input-group input-group-sm mb-2"><span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span><input type="text" class="form-control" id="search-acc" placeholder="Cerca accompagnatore..." onkeyup="globalSearch(this.value)"></div>
+                         <div class="table-responsive" style="max-height: 300px; overflow-y: auto;"><table class="table table-sm align-middle mb-0 table-bordered" id="table-accompagnatori"><thead class="table-light sticky-top"><tr class="text-center small"><th>Bus</th><th>#</th><th>Nominativo</th><th>Nascita</th><th>Residenza</th><th>CF</th><th>Tessera</th><th>Scadenza</th><th>Cod/Sic</th><th>Azioni</th></tr></thead><tbody class="table-data-small"></tbody></table></div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- VIEW 3: ACCOMPAGNATORI -->
-        <div id="view-acc" class="section-view">
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="card p-3 sticky-lg-top" style="top:140px;">
-                        <div class="input-group mb-3">
-                            <span class="input-group-text bg-white"><i class="fa-solid fa-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Cerca..." onkeyup="globalSearch(this.value, 'accompagnatori')">
-                        </div>
-                        <button class="btn btn-secondary w-100 mb-3" onclick="toggleForm('form-acc-wrapper')"><i class="fa-solid fa-user-plus"></i> Nuovo Accompagnatore</button>
-                        
-                        <div id="form-acc-wrapper" style="display:none;" class="bg-light p-3 rounded border">
-                            <form id="formAcc" onsubmit="handleFormSubmit(event, 'accompagnatori')">
-                                <div class="row g-2">
-                                    <div class="col-6"><input type="text" class="form-control" name="nome" placeholder="Nome" required></div>
-                                    <div class="col-6"><input type="text" class="form-control" name="cognome" placeholder="Cognome" required></div>
-                                    <div class="col-6"><select class="form-select" name="sesso"><option value="M">Uomo</option><option value="F">Donna</option></select></div>
-                                    <div class="col-6"><input type="date" class="form-control" name="dataNascita"></div>
-                                    <div class="col-12"><button type="submit" id="btn-submit-acc" class="btn btn-secondary w-100">Salva</button></div>
-                                </div>
-                            </form>
-                        </div>
+            <!-- DESTRA -->
+            <div class="col-lg-5">
+                <div class="card border-primary" id="card-trip">
+                    <div class="card-header bg-primary text-white"><span id="trip-header-title"><i class="fa-solid fa-bus"></i> Gestione Trasferta Bus</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-trip')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('trip-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-body" id="trip-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded"><h6 class="m-0 text-primary fw-bold">Partecipanti: <span id="trip-count" class="badge bg-primary">0</span></h6><button class="btn btn-warning btn-sm fw-bold" onclick="closeTrip()"><i class="fa-solid fa-box-archive"></i> Archivia / Chiudi</button></div>
+                        <div class="table-responsive border rounded bg-white" style="max-height: 600px; overflow-y: auto;"><table class="table table-sm table-bordered mb-0" id="table-trip"><thead class="table-primary sticky-top" style="z-index: 5;"><tr class="text-center"><th width="8%">N°</th><th>Dati Completi Nominativo</th><th width="25%">Strumenti</th></tr></thead><tbody></tbody></table></div>
+                        <div class="mt-2 text-muted small fst-italic text-center">Usa le icone per: Evidenziare (Verde), Note (Arancione), Posto (Sposta in riga), Modifica nome, Elimina.</div>
                     </div>
                 </div>
-                <div class="col-lg-8">
-                    <div class="card">
-                        <div class="card-header">Lista Accompagnatori <span class="badge bg-secondary rounded-pill" id="count-acc">0</span></div>
-                        <div class="card-body p-0">
-                            <table class="table table-view mb-0" id="table-accompagnatori">
-                                <thead><tr><th width="50">Add</th><th width="40">#</th><th>Nominativo</th><th>Dati</th><th>Azioni</th></tr></thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="card mt-4 border-dark" id="card-archive">
+                    <div class="card-header bg-dark text-white"><span><i class="fa-solid fa-box-archive"></i> Archivio Trasferte Concluse</span><div class="header-btn-group"><button class="btn btn-sm btn-outline-light" onclick="toggleMaximize('card-archive')"><i class="fa-solid fa-expand"></i></button><button class="btn btn-sm btn-outline-light" onclick="toggleSection('archive-body')">Mostra/Nascondi</button></div></div>
+                    <div class="card-body" id="archive-body" style="display:none;"><ul class="list-group list-group-flush" id="archive-list"></ul><div class="mt-3 text-center" id="empty-archive-msg" style="display:none;"><small class="text-muted">Nessuna trasferta in archivio.</small></div></div>
                 </div>
             </div>
         </div>
+    </div>
 
-    </div> <!-- End Main Container -->
-
-    <!-- NAVIGATION MOBILE (BOTTOM BAR) -->
-    <nav class="bottom-nav">
-        <button class="nav-item-mob active" onclick="switchView('soci', this)"><i class="fa-solid fa-users"></i> Soci</button>
-        <button class="nav-item-mob" onclick="switchView('bus', this)"><i class="fa-solid fa-bus"></i> Bus</button>
-        <button class="nav-item-mob" onclick="switchView('acc', this)"><i class="fa-solid fa-user-tag"></i> Accomp.</button>
+    <!-- MOBILE BOTTOM NAVIGATION (Solo su Smartphone) -->
+    <nav class="mobile-bottom-nav">
+        <a href="#card-soci-form" class="nav-item" onclick="toggleSection('form-soci-body')">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Iscrizione</span>
+        </a>
+        <a href="#card-soci-list" class="nav-item">
+            <i class="fa-solid fa-users"></i>
+            <span>Soci</span>
+        </a>
+        <a href="#card-trip" class="nav-item">
+            <i class="fa-solid fa-bus"></i>
+            <span>Bus</span>
+        </a>
     </nav>
 
-    <!-- LOGICA JS -->
+    <!-- FIREBASE CONFIGURATION -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-        const fbConfig = { apiKey: "AIzaSyBXmydyeKbs4KeOEySg1-FH9D9ljlZkPdI", authDomain: "clubnapoliapp-9ab70.firebaseapp.com", databaseURL: "https://clubnapoliapp-9ab70-default-rtdb.europe-west1.firebasedatabase.app", projectId: "clubnapoliapp-9ab70", storageBucket: "clubnapoliapp-9ab70.firebasestorage.app", messagingSenderId: "1030242125780", appId: "1:1030242125780:web:78147fc6ac7ca45c833841", measurementId: "G-MX7DMKFSTX" };
-        let db; 
-        try { 
-            const app = initializeApp(fbConfig); db = getDatabase(app); 
-            onValue(ref(db, 'clubData'), snap => { 
-                const d = snap.val(); 
-                if(d) { window.appData = d; initArrays(); renderAll(); updateStatus(true); } 
-            }, err => updateStatus(false));
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBXmydyeKbs4KeOEySg1-FH9D9ljlZkPdI",
+            authDomain: "clubnapoliapp-9ab70.firebaseapp.com",
+            databaseURL: "https://clubnapoliapp-9ab70-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "clubnapoliapp-9ab70",
+            storageBucket: "clubnapoliapp-9ab70.firebasestorage.app",
+            messagingSenderId: "1030242125780",
+            appId: "1:1030242125780:web:78147fc6ac7ca45c833841",
+            measurementId: "G-MX7DMKFSTX"
+        };
+
+        let app, db;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            const dbRef = ref(db, 'clubData');
+            onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    window.appData = data;
+                    if(!window.appData.printExpired) window.appData.printExpired = [];
+                    if(!window.appData.printExpiring) window.appData.printExpiring = [];
+                    window.renderAll();
+                    updateStatus(true);
+                } else {
+                    if(!window.appData || !window.appData.soci) {
+                        const local = localStorage.getItem('clubNapoliData');
+                        if(local) {
+                            try {
+                                window.appData = JSON.parse(local);
+                                if(!window.appData.printExpired) window.appData.printExpired = [];
+                                if(!window.appData.printExpiring) window.appData.printExpiring = [];
+                                if(window.appData.soci) window.saveDataOnline();
+                            } catch(e) {}
+                        }
+                    }
+                }
+            }, (error) => { console.error(error); updateStatus(false); });
         } catch(e) { console.error(e); updateStatus(false); }
 
-        window.saveCloud = function() {
-            updateStatus(null);
-            if(db) set(ref(db, 'clubData'), window.appData).then(()=>updateStatus(true)).catch(()=>updateStatus(false));
-            try { localStorage.setItem('clubNapoliData', JSON.stringify(window.appData)); } catch(e){}
-            showSaveToast();
-        }
-        function updateStatus(ok) {
-            const el = document.getElementById('status-dot');
-            if(ok===true) el.className='status-dot dot-ok'; else if(ok===false) el.className='status-dot dot-err'; else el.className='status-dot dot-sync';
+        window.saveDataOnline = function() {
+            if(db && window.appData) {
+                updateStatus(null);
+                try { localStorage.setItem('clubNapoliData', JSON.stringify(window.appData)); } catch(e){}
+                set(ref(db, 'clubData'), window.appData).then(() => updateStatus(true)).catch((err) => { console.error(err); updateStatus(false); });
+            }
+        };
+
+        function updateStatus(online) {
+            const el = document.getElementById('cloud-status');
+            if(online === true) { el.innerHTML = '<i class="fa-solid fa-cloud"></i> Online'; el.className = 'status-ok'; } 
+            else if(online === false) { el.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Offline'; el.className = 'status-err'; } 
+            else { el.innerHTML = '<i class="fa-solid fa-sync fa-spin"></i> Sync...'; el.className = 'status-sync'; }
         }
     </script>
 
+    <!-- MAIN LOGIC -->
     <script>
-        window.appData = { soci:[], accompagnatori:[], trasfertaAttiva:[], archivioTrasferte:[], currentTripInfo:null, printExpired:[], printExpiring:[] };
-        let editState = { editing:false, id:null, type:null };
+        window.appData = { 
+            soci: [], 
+            accompagnatori: [], 
+            trasfertaAttiva: [], 
+            archivioTrasferte: [], 
+            currentTripInfo: null, 
+            customLogo: null,
+            printExpired: [], 
+            printExpiring: [] 
+        };
+        
+        let editState = { isEditing: false, id: null, type: null };
 
-        function initArrays() { ['soci','accompagnatori','trasfertaAttiva','archivioTrasferte','printExpired','printExpiring'].forEach(k=>{if(!window.appData[k])window.appData[k]=[]}); }
+        window.handleFormSubmit = function(e, type) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const obj = Object.fromEntries(formData.entries());
 
-        // NAVIGAZIONE
-        window.switchView = function(view, btn) {
-            document.querySelectorAll('.section-view').forEach(e=>e.classList.remove('active'));
-            document.getElementById('view-'+view).classList.add('active');
-            
-            // Sync tasti attivi (sia mobile che desktop)
-            document.querySelectorAll('.nav-item-mob, .desktop-tab').forEach(e=>e.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            
-            // Se clicco su un tab desktop, aggiorno anche quello mobile (visual only)
-            const mobBtns = document.querySelectorAll('.nav-item-mob');
-            if(view=='soci') mobBtns[0].classList.add('active');
-            if(view=='bus') mobBtns[1].classList.add('active');
-            if(view=='acc') mobBtns[2].classList.add('active');
-            
-            // Idem per desktop
-            const deskTabs = document.querySelectorAll('.desktop-tab');
-            if(view=='soci') deskTabs[0].classList.add('active');
-            if(view=='bus') deskTabs[1].classList.add('active');
-            if(view=='acc') deskTabs[2].classList.add('active');
-        }
+            if (editState.isEditing && editState.type === type) {
+                const index = window.appData[type].findIndex(m => m.id === editState.id);
+                if (index !== -1) {
+                    obj.id = editState.id;
+                    obj.evidenziato = window.appData[type][index].evidenziato;
+                    window.appData[type][index] = obj;
+                    window.appData.trasfertaAttiva.forEach(t => { if(t.refId === obj.id) { t.nome = obj.nome; t.cognome = obj.cognome; } });
+                    if(window.appData.archivioTrasferte) { window.appData.archivioTrasferte.forEach(arch => { arch.list.forEach(t => { if(t.refId === obj.id) { t.nome = obj.nome; t.cognome = obj.cognome; } }); }); }
+                    cancelEdit(type); syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline();
+                    alert("Modifica salvata!");
+                }
+            } else {
+                if (obj.cf && window.appData[type].some(m => m.cf && m.cf.toUpperCase() === obj.cf.toUpperCase())) { alert("Codice Fiscale già presente!"); return; }
+                obj.id = Date.now().toString(); obj.evidenziato = false;
+                if(!window.appData[type]) window.appData[type] = [];
+                window.appData[type].push(obj);
+                e.target.reset(); if(window.saveDataOnline) window.saveDataOnline();
+            }
+        };
 
         window.renderAll = function() {
-            initArrays();
-            renderTable('soci'); renderTable('accompagnatori'); renderTrip(); renderArchive();
-            document.getElementById('count-soci').innerText = window.appData.soci.length;
-            document.getElementById('count-soci-d').innerText = window.appData.soci.length; // Desktop counter
-            document.getElementById('count-acc').innerText = window.appData.accompagnatori.length;
-            
-            let tName = window.appData.currentTripInfo?.name || "Trasferta Attiva";
-            document.getElementById('trip-title').innerHTML = `<i class="fa-solid fa-bus"></i> ${tName}`;
-            
-            if(window.appData.customLogo) document.getElementById('app-logo').src = window.appData.customLogo;
-            updatePrintBtns();
-        }
+            if(!window.appData.printExpired) window.appData.printExpired = [];
+            if(!window.appData.printExpiring) window.appData.printExpiring = [];
+            window.renderTable('soci'); window.renderTable('accompagnatori'); window.renderTrip(); window.renderArchive();
+            document.getElementById('count-soci').innerText = window.appData.soci ? window.appData.soci.length : 0;
+            document.getElementById('count-acc').innerText = window.appData.accompagnatori ? window.appData.accompagnatori.length : 0;
+            const tripHeader = document.getElementById('trip-header-title');
+            let title = '<i class="fa-solid fa-bus"></i> Gestione Trasferta';
+            if(window.appData.currentTripInfo && window.appData.currentTripInfo.name) title += `: <span class="text-warning">${window.appData.currentTripInfo.name}</span>`;
+            title += ` <button class="btn btn-sm btn-outline-light border-0 ms-2" onclick="renameCurrentTrip()"><i class="fa-solid fa-pen-to-square"></i></button>`;
+            if(tripHeader) tripHeader.innerHTML = title;
+            if(window.appData.customLogo) { document.getElementById('app-logo').src = window.appData.customLogo; updateAppIcons(window.appData.customLogo); }
+            updatePrintButtons();
+        };
 
-        window.renderTable = function(type, filter="") {
-            const tbody = document.querySelector(`#table-${type} tbody`); if(!tbody) return; tbody.innerHTML='';
-            let list = [...window.appData[type]].sort((a,b)=>(a.cognome||'').localeCompare(b.cognome||''));
-            if(filter) list = list.filter(x=>(x.cognome+' '+x.nome).toLowerCase().includes(filter.toLowerCase()));
+        window.renderTable = function(type, filter = "") {
+            const tbody = document.querySelector(type === 'soci' ? '#table-soci tbody' : '#table-accompagnatori tbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            if(!window.appData[type]) window.appData[type] = [];
+            let list = [...window.appData[type]].sort((a,b) => (a.cognome || '').localeCompare(b.cognome || ''));
+            if(filter) list = list.filter(item => (item.cognome + ' ' + item.nome).toLowerCase().includes(filter));
 
-            list.forEach((item, idx) => {
+            list.forEach((item, index) => {
                 const tr = document.createElement('tr');
-                if(item.evidenziato) tr.classList.add('highlight-row');
+                if(item.evidenziato) tr.classList.add('highlight-row'); 
+                const nameClass = item.sesso === 'M' ? 'name-male' : 'name-female';
                 
-                // Logica Colori
-                let nameClass="name-cell", scadHtml = item.scadenza ? formatDate(item.scadenza) : '-';
+                let scadenzaHtml = '-';
+                let extraNameClass = ''; 
+
                 if(item.scadenza) {
-                    const today=new Date(); today.setHours(0,0,0,0); const exp=new Date(item.scadenza);
-                    const warn=new Date(); warn.setMonth(today.getMonth()+3);
+                    const today = new Date(); today.setHours(0,0,0,0);
+                    const exp = new Date(item.scadenza);
+                    let icon = '';
                     if(exp < today) {
-                        nameClass += " text-expired";
-                        const sel = window.appData.printExpired.includes(item.id);
-                        scadHtml += ` <i class="fa-solid ${sel?'fa-check-square':'fa-square'} text-danger" style="cursor:pointer" onclick="togglePrint('${item.id}','printExpired')"></i>`;
-                    } else if(exp <= warn) {
-                        nameClass += " text-expiring";
-                        const sel = window.appData.printExpiring.includes(item.id);
-                        scadHtml += ` <i class="fa-solid ${sel?'fa-check-square':'fa-square'} text-warning" style="cursor:pointer" onclick="togglePrint('${item.id}','printExpiring')"></i>`;
+                        const isSelected = window.appData.printExpired && window.appData.printExpired.includes(item.id);
+                        const iconClass = isSelected ? 'fa-print' : 'fa-circle';
+                        icon = `<i class="fa-solid ${iconClass} text-danger ms-2" style="cursor:pointer;" onclick="toggleExpiredSelection('${item.id}')"></i>`;
+                        extraNameClass = 'text-expired';
                     } else {
-                        scadHtml += ` <i class="fa-solid fa-circle text-success small"></i>`;
+                        const threeMonths = new Date(); threeMonths.setMonth(today.getMonth() + 3);
+                        if(exp <= threeMonths) {
+                            const isSelected = window.appData.printExpiring && window.appData.printExpiring.includes(item.id);
+                            const iconClass = isSelected ? 'fa-print' : 'fa-circle';
+                            icon = `<i class="fa-solid ${iconClass} text-warning ms-2" style="cursor:pointer;" onclick="toggleExpiringSelection('${item.id}')"></i>`;
+                            extraNameClass = 'text-expiring';
+                        } else {
+                            icon = '<i class="fa-solid fa-circle text-success ms-2"></i>';
+                        }
                     }
+                    scadenzaHtml = formatDateIT(item.scadenza) + icon;
                 }
 
-                // Generazione HTML che funziona sia come Tabella (Desktop) che come Card (Mobile) grazie al CSS
                 tr.innerHTML = `
-                    <td class="text-center"><button class="btn btn-sm btn-success rounded-circle" onclick="addToBus('${item.id}','${type}')"><i class="fa-solid fa-plus"></i></button></td>
-                    <td class="text-center text-muted">${idx+1}</td>
-                    <td class="${nameClass} text-uppercase">${item.cognome} ${item.nome}</td>
-                    <td class="small text-muted">${item.luogo||''} <span class="desktop-only">-</span><br class="mobile-only"> ${formatDate(item.dataNascita)}</td>
-                    <td class="small text-muted">${item.residenza||''} (${item.provResidenza||''})</td>
-                    <td class="desktop-only">${item.tessera||''}</td>
-                    <td class="small">${scadHtml}</td>
-                    <td>
-                        <button class="btn btn-sm btn-light border text-warning" onclick="editItem('${item.id}','${type}')"><i class="fa-solid fa-pencil"></i></button>
-                        <button class="btn btn-sm btn-light border text-success" onclick="toggleHigh('${item.id}','${type}')"><i class="fa-solid fa-highlighter"></i></button>
-                        <button class="btn btn-sm btn-light border text-danger" onclick="delItem('${item.id}','${type}')"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
+                    <td class="text-center"><button class="btn btn-sm btn-success rounded-circle" onclick="addToTrip('${item.id}', '${type}')"><i class="fa-solid fa-plus"></i></button></td>
+                    <td class="text-center">${index + 1}</td>
+                    <td class="${nameClass} name-cell-large text-uppercase ${extraNameClass}">${item.cognome} ${item.nome}</td>
+                    <td>${item.luogo || ''} (${item.prov || ''}) - ${formatDateIT(item.dataNascita)}</td>
+                    <td>${item.residenza || ''} (${item.provResidenza || ''})</td>
+                    <td>${item.cf || ''}</td>
+                    <td class="text-center">${item.tessera || '-'}</td>
+                    <td class="text-center">${scadenzaHtml}</td>
+                    <td class="text-center">${item.codSic || '-'}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-warning action-btn border-0" onclick="loadMemberForEdit('${item.id}', '${type}')"><i class="fa-solid fa-pencil"></i></button>
+                        <button class="btn btn-sm btn-outline-danger action-btn border-0" onclick="deleteMember('${item.id}', '${type}')"><i class="fa-solid fa-trash"></i></button>
+                        <button class="btn btn-sm btn-outline-success action-btn border-0" onclick="toggleHighlight('${item.id}', '${type}')"><i class="fa-solid fa-highlighter"></i></button>
+                    </td>`;
                 tbody.appendChild(tr);
             });
-        }
+        };
 
         window.renderTrip = function() {
-            const tbody = document.querySelector('#table-trip tbody'); if(!tbody) return; tbody.innerHTML='';
+            const tbody = document.querySelector('#table-trip tbody'); if(!tbody) return; tbody.innerHTML = '';
+            if(!window.appData.trasfertaAttiva) window.appData.trasfertaAttiva = [];
             document.getElementById('trip-count').innerText = window.appData.trasfertaAttiva.length;
-            document.getElementById('empty-trip').style.display = window.appData.trasfertaAttiva.length ? 'none' : 'block';
 
-            window.appData.trasfertaAttiva.forEach((t, idx) => {
+            window.appData.trasfertaAttiva.forEach((item, index) => {
+                let fullData = {};
+                if(item.originType === 'soci' && window.appData.soci) fullData = window.appData.soci.find(s => s.id === item.refId) || {};
+                else if(window.appData.accompagnatori) fullData = window.appData.accompagnatori.find(a => a.id === item.refId) || {};
                 const tr = document.createElement('tr');
-                if(t.highlightColor=='green') tr.classList.add('highlight-row');
-                
+                if(item.highlightColor === 'green') tr.classList.add('trip-highlight');
+                const sesso = item.sesso || fullData.sesso || 'M';
+                const nameClass = sesso === 'M' ? 'name-male' : 'name-female';
                 tr.innerHTML = `
-                    <td class="text-center fw-bold align-middle">${idx+1}</td>
+                    <td class="fw-bold text-center align-middle">${index + 1}</td>
                     <td>
-                        <div class="fw-bold text-uppercase">${t.cognome} ${t.nome}</div>
-                        ${t.note ? `<span class="badge bg-warning text-dark me-1">${t.note}</span>` : ''}
-                        ${t.location ? `<span class="badge bg-info text-dark"><i class="fa-solid fa-location-dot"></i> ${t.location}</span>` : ''}
-                    </td>
-                    <td>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button class="btn btn-outline-secondary" onclick="tripAct('${t.tripId}','note')"><i class="fa-regular fa-note-sticky"></i></button>
-                            <button class="btn btn-outline-success" onclick="tripAct('${t.tripId}','hl')"><i class="fa-solid fa-check"></i></button>
-                            <button class="btn btn-outline-primary" onclick="tripAct('${t.tripId}','pos')"><i class="fa-solid fa-arrow-down-up"></i></button>
-                            <button class="btn btn-outline-dark" onclick="tripAct('${t.tripId}','edit')"><i class="fa-solid fa-pen"></i></button>
-                            <button class="btn btn-outline-danger" onclick="tripAct('${t.tripId}','del')"><i class="fa-solid fa-trash"></i></button>
+                        <div class="nominativo-container">
+                            <span class="${nameClass} text-uppercase">${item.cognome} ${item.nome}</span>
+                            ${item.note ? `<span class="text-danger fw-bold ms-2 small">(${item.note})</span>` : ''}
                         </div>
+                        <div class="data-detail">Nato: ${fullData.luogo || ''} (${fullData.prov || ''}) - ${formatDateIT(fullData.dataNascita)}</div>
+                        <div class="data-detail">Res: ${fullData.residenza || ''} (${fullData.provResidenza || ''})</div>
+                        <div class="data-detail">CF: ${fullData.cf || ''} | Tess: ${fullData.tessera || '-'}</div>
+                        ${item.location ? `<div class="badge bg-info text-dark mt-1 ms-2"><i class="fa-solid fa-location-dot"></i> ${item.location}</div>` : ''}
                     </td>
-                `;
+                    <td class="align-middle text-center">
+                        <div class="trip-actions-btn">
+                            <button class="btn btn-sm btn-outline-success" onclick="tripAction('${item.tripId}', 'highlight')"><i class="fa-solid fa-marker"></i></button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="tripAction('${item.tripId}', 'note')"><i class="fa-solid fa-note-sticky"></i></button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="tripAction('${item.tripId}', 'pos')"><i class="fa-solid fa-chair"></i></button>
+                            <button class="btn btn-sm btn-outline-dark" onclick="tripAction('${item.tripId}', 'edit')"><i class="fa-solid fa-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="tripAction('${item.tripId}', 'delete')"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </td>`;
                 tbody.appendChild(tr);
             });
-        }
+        };
 
-        // AZIONI
-        window.handleFormSubmit = function(e, type) {
-            e.preventDefault(); const fd=new FormData(e.target); const obj=Object.fromEntries(fd.entries());
-            if(editState.editing && editState.type==type) {
-                const i = window.appData[type].findIndex(x=>x.id==editState.id);
-                if(i>=0) { 
-                    obj.id=editState.id; obj.evidenziato=window.appData[type][i].evidenziato; 
-                    window.appData[type][i]=obj; 
-                    window.appData.trasfertaAttiva.forEach(t=>{if(t.refId==obj.id){t.nome=obj.nome;t.cognome=obj.cognome}});
-                }
-                resetForm(type);
-            } else {
-                if(obj.cf && window.appData[type].some(x=>x.cf?.toUpperCase()==obj.cf.toUpperCase())) { alert("CF Esistente"); return; }
-                obj.id=Date.now().toString(); obj.evidenziato=false;
-                window.appData[type].push(obj);
-                e.target.reset();
-            }
-            saveCloud(); renderAll();
-            // Su mobile chiudo il form dopo l'inserimento
-            if(window.innerWidth < 992) toggleForm(type=='soci'?'form-soci-wrapper':'form-acc-wrapper');
-        }
-
-        window.addToBus = function(id, type) {
-            if(window.appData.trasfertaAttiva.some(x=>x.refId==id)) { alert("Già presente"); return; }
-            const p = window.appData[type].find(x=>x.id==id);
-            window.appData.trasfertaAttiva.push({tripId:Date.now()+Math.random().toString(), refId:id, originType:type, nome:p.nome, cognome:p.cognome, note:""});
-            saveCloud(); renderTrip(); showSaveToast("Aggiunto!");
-        }
-
-        window.tripAct = function(tid, act) {
-            const idx = window.appData.trasfertaAttiva.findIndex(x=>x.tripId==tid); if(idx<0) return;
-            const t = window.appData.trasfertaAttiva[idx];
-            
-            if(act=='del') window.appData.trasfertaAttiva.splice(idx,1);
-            if(act=='hl') t.highlightColor = t.highlightColor=='green'?'':'green';
-            if(act=='note') t.note = prompt("Nota:", t.note)||t.note;
-            if(act=='edit') { const n=prompt("Nome:", t.cognome+' '+t.nome); if(n){const s=n.split(" ");t.cognome=s[0];t.nome=s.slice(1).join(" ");} }
-            if(act=='pos') {
-                const p = parseInt(prompt(`Sposta (1-${window.appData.trasfertaAttiva.length})`, idx+1));
-                if(p>0 && p<=window.appData.trasfertaAttiva.length) {
-                    window.appData.trasfertaAttiva.splice(p-1, 0, window.appData.trasfertaAttiva.splice(idx,1)[0]);
-                }
-            }
-            saveCloud(); renderTrip();
-        }
-
-        // UTILS
-        window.editItem = function(id, type) {
-            const p = window.appData[type].find(x=>x.id==id); if(!p) return;
-            editState = {editing:true, id:id, type:type};
-            const fId = type=='soci'?'formSoci':'formAcc';
-            const wId = type=='soci'?'form-soci-wrapper':'form-acc-wrapper';
-            const f = document.getElementById(fId);
-            for(let k in p) if(f.elements[k]) f.elements[k].value=p[k];
-            document.getElementById(type=='soci'?'btn-submit-soci':'btn-submit-acc').innerText="Modifica";
-            document.getElementById(wId).style.display='block';
-            if(window.innerWidth < 992) document.getElementById(wId).scrollIntoView();
-        }
-        window.delItem = function(id, type) { if(confirm("Eliminare?")) { window.appData[type]=window.appData[type].filter(x=>x.id!=id); window.appData.trasfertaAttiva=window.appData.trasfertaAttiva.filter(x=>x.refId!=id); saveCloud(); renderAll(); } }
-        window.toggleHigh = function(id, type) { const p=window.appData[type].find(x=>x.id==id); if(p){p.evidenziato=!p.evidenziato; saveCloud(); renderTable(type);} }
-        window.toggleForm = function(id) { const el=document.getElementById(id); el.style.display = el.style.display=='none'?'block':'none'; }
-        window.globalSearch = function(q, type) { renderTable(type, q); }
-        window.resetForm = function(type) { 
-            document.getElementById(type=='soci'?'formSoci':'formAcc').reset(); 
-            editState={editing:false}; 
-            document.getElementById(type=='soci'?'btn-submit-soci':'btn-submit-acc').innerText="Salva"; 
-        }
-        window.closeTrip = function() {
-            if(!window.appData.trasfertaAttiva.length) return;
-            const name = prompt("Nome Trasferta:", window.appData.currentTripInfo?.name||""); if(!name) return;
-            // Verifica update
-            if(window.appData.currentTripInfo?.id) {
-                const aIdx = window.appData.archivioTrasferte.findIndex(x=>x.id==window.appData.currentTripInfo.id);
-                if(aIdx>=0) {
-                    window.appData.archivioTrasferte[aIdx] = {id:window.appData.currentTripInfo.id, name:name, date:new Date().toLocaleDateString(), list:[...window.appData.trasfertaAttiva]};
-                    window.appData.trasfertaAttiva=[]; window.appData.currentTripInfo=null;
-                    saveCloud(); renderAll(); return;
-                }
-            }
-            window.appData.archivioTrasferte.push({id:Date.now().toString(), name:name, date:new Date().toLocaleDateString(), list:[...window.appData.trasfertaAttiva]});
-            window.appData.trasfertaAttiva=[]; window.appData.currentTripInfo=null; saveCloud(); renderAll();
-        }
-        window.renameTrip = function() { const n=prompt("Nuovo nome:"); if(n) { if(!window.appData.currentTripInfo) window.appData.currentTripInfo={}; window.appData.currentTripInfo.name=n; saveCloud(); renderAll(); } }
         window.renderArchive = function() {
-            const ul = document.getElementById('archive-list'); ul.innerHTML='';
-            [...window.appData.archivioTrasferte].reverse().forEach(a => {
-                ul.innerHTML += `<li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div><strong>${a.name}</strong> <small>(${a.list.length} pax)</small></div>
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary" onclick="restoreTrip('${a.id}')"><i class="fa-solid fa-folder-open"></i></button>
-                        <button class="btn btn-sm btn-outline-danger" onclick="deleteArch('${a.id}')"><i class="fa-solid fa-trash"></i></button>
-                    </div>
-                </li>`;
+            const ul = document.getElementById('archive-list'); if(!ul) return; ul.innerHTML = '';
+            if(!window.appData.archivioTrasferte) window.appData.archivioTrasferte = [];
+            const list = [...window.appData.archivioTrasferte].reverse();
+            const emptyMsg = document.getElementById('empty-archive-msg');
+            if(list.length === 0) { if(emptyMsg) emptyMsg.style.display = 'block'; } else { if(emptyMsg) emptyMsg.style.display = 'none'; }
+            list.forEach(arch => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.innerHTML = `<div><strong>${arch.name}</strong> <small>(${arch.date})</small> <span class="archive-count-badge">${arch.list.length}</span></div> <div> <button class="btn btn-sm btn-outline-secondary me-1" onclick="printArchiveTrip('${arch.id}')"><i class="fa-solid fa-print"></i></button> <button class="btn btn-sm btn-outline-primary" onclick="restoreTrip('${arch.id}')"><i class="fa-solid fa-folder-open"></i></button> <button class="btn btn-sm btn-outline-danger" onclick="deleteArchive('${arch.id}')"><i class="fa-solid fa-trash"></i></button> </div>`;
+                ul.appendChild(li);
             });
-        }
-        window.restoreTrip = function(id) { const a=window.appData.archivioTrasferte.find(x=>x.id==id); if(a && confirm("Caricare?")){ window.appData.trasfertaAttiva=[...a.list]; window.appData.currentTripInfo={id:a.id, name:a.name}; saveCloud(); renderAll(); } }
-        window.deleteArch = function(id) { if(confirm("Eliminare?")){ window.appData.archivioTrasferte=window.appData.archivioTrasferte.filter(x=>x.id!=id); saveCloud(); renderArchive(); } }
-        
-        // Print Logic
-        window.togglePrint = function(id, arr) { 
-            const idx = window.appData[arr].indexOf(id); 
-            if(idx>=0) window.appData[arr].splice(idx,1); else window.appData[arr].push(id);
-            saveCloud(); renderTable('soci'); updatePrintBtns();
-        }
-        function updatePrintBtns() {
-            document.getElementById('btn-exp-soci').style.display = window.appData.printExpired.length ? 'inline-block' : 'none';
-            document.getElementById('btn-ing-soci').style.display = window.appData.printExpiring.length ? 'inline-block' : 'none';
-        }
-        window.printExpiredPDF = function() { createPDF(window.appData.printExpired, "Soci Scaduti", [220,53,69]); }
-        window.printExpiringPDF = function() { createPDF(window.appData.printExpiring, "In Scadenza", [255,193,7]); }
-        window.exportPDFSoci = function() {
-            const doc=new window.jspdf.jsPDF(); doc.text("Lista Soci",14,15);
-            const rows = window.appData.soci.map(s=>[s.cognome+' '+s.nome, formatDate(s.dataNascita), s.luogo, s.tessera]);
-            doc.autoTable({head:[["Nome","Nascita","Luogo","Tessera"]], body:rows, startY:20}); doc.save("soci.pdf");
-        }
-        function createPDF(ids, title, col) {
-            const doc=new window.jspdf.jsPDF(); doc.text(title,14,15);
-            const rows=[]; [...window.appData.soci, ...window.appData.accompagnatori].forEach(s=>{ if(ids.includes(s.id)) rows.push([s.cognome+' '+s.nome, formatDate(s.scadenza), s.tessera]); });
-            doc.autoTable({head:[["Nome","Scadenza","Tessera"]], body:rows, startY:20, headStyles:{fillColor:col}}); window.open(doc.output('bloburl'),'_blank');
-        }
+        };
 
-        // Helpers
-        function formatDate(d) { if(!d)return''; const p=d.split('-'); return p.length==3?`${p[2]}/${p[1]}/${p[0].substring(2)}`:d; }
-        function showSaveToast(m="Salvato") { const e=document.getElementById('save-indicator'); e.innerText=m; e.style.display='block'; setTimeout(()=>e.style.display='none',1500); }
-        window.downloadSelfContained = function() { const h=document.documentElement.outerHTML.replace(/window\.appData = \{.*?\};/, `window.appData = ${JSON.stringify(window.appData)};`); const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([h],{type:'text/html'})); a.download="Backup.html"; a.click(); }
-        window.exportData = function() { const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(window.appData)); a.download="data.json"; a.click(); }
-        window.importData = function(i) { const r=new FileReader(); r.onload=e=>{if(confirm("Sovrascrivere?")){window.appData=JSON.parse(e.target.result);saveCloud();renderAll();}}; r.readAsText(i.files[0]); }
-        window.importLogo = function(i) { const r=new FileReader(); r.onload=e=>{window.appData.customLogo=e.target.result;saveCloud();renderAll();}; r.readAsDataURL(i.files[0]); }
+        window.globalSearch = function(query) {
+            const inputSoci = document.getElementById('search-soci');
+            const inputAcc = document.getElementById('search-acc');
+            if(inputSoci && inputSoci.value !== query) inputSoci.value = query;
+            if(inputAcc && inputAcc.value !== query) inputAcc.value = query;
+            if(!query) { window.renderTable('soci'); window.renderTable('accompagnatori'); return; }
+            document.getElementById('list-soci-body').style.display = 'block';
+            document.getElementById('list-acc-body').style.display = 'block';
+            const lower = query.toLowerCase();
+            window.renderTable('soci', lower); window.renderTable('accompagnatori', lower);
+        };
+
+        function formatDateIT(isoDate) { if (!isoDate) return ''; const parts = isoDate.split('-'); return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : isoDate; }
+        function updateSexColor(select) { if(select.value === 'M') { select.style.backgroundColor = '#e3f2fd'; select.style.color = '#0d6efd'; } else { select.style.backgroundColor = '#fce4ec'; select.style.color = '#d63384'; } }
+        function toggleSection(id) { const el = document.getElementById(id); if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none'; }
+        function toggleMaximize(cardId) { const card = document.getElementById(cardId); card.classList.toggle('card-fullscreen'); const body = card.querySelector('.card-body'); if(body.style.display === 'none') body.style.display = 'block'; }
+        function updateAppIcons(base64) { document.getElementById('dynamic-favicon').href = base64; document.getElementById('dynamic-apple-icon').href = base64; }
+
+        window.deleteMember = function(id, type) { if(confirm("Eliminare definitivamente?")) { window.appData[type] = window.appData[type].filter(m => m.id !== id); window.appData.trasfertaAttiva = window.appData.trasfertaAttiva.filter(t => t.refId !== id); syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline(); } };
+        window.loadMemberForEdit = function(id, type) { const item = window.appData[type].find(m => m.id === id); if(!item) return; document.getElementById(type === 'soci' ? 'form-soci-body' : 'form-acc-body').style.display = 'block'; const cardId = type === 'soci' ? 'card-soci-form' : 'card-acc-form'; document.getElementById(cardId).scrollIntoView({ behavior: 'smooth', block: 'center' }); document.getElementById(cardId).classList.add('editing-mode'); const form = document.getElementById(type === 'soci' ? 'formSoci' : 'formAcc'); for (const key in item) { if (form.elements[key]) { form.elements[key].value = item[key]; if(key === 'sesso' && form.elements[key].tagName === 'SELECT') updateSexColor(form.elements[key]); } } editState = { isEditing: true, id: id, type: type }; const btnSubmit = document.getElementById(type === 'soci' ? 'btn-submit-soci' : 'btn-submit-acc'); btnSubmit.innerText = "Salva Modifiche"; btnSubmit.classList.add('btn-warning'); document.getElementById(type === 'soci' ? 'btn-cancel-soci' : 'btn-cancel-acc').style.display = 'inline-block'; };
+        window.cancelEdit = function(type) { document.getElementById(type === 'soci' ? 'formSoci' : 'formAcc').reset(); editState = { isEditing: false, id: null, type: null }; const cardId = type === 'soci' ? 'card-soci-form' : 'card-acc-form'; document.getElementById(cardId).classList.remove('editing-mode'); const btnSubmit = document.getElementById(type === 'soci' ? 'btn-submit-soci' : 'btn-submit-acc'); btnSubmit.innerText = "Inserisci"; btnSubmit.classList.remove('btn-warning'); document.getElementById(type === 'soci' ? 'btn-cancel-soci' : 'btn-cancel-acc').style.display = 'none'; };
+        window.toggleHighlight = function(id, type) { const item = window.appData[type].find(m => m.id === id); if(item) { item.evidenziato = !item.evidenziato; if(window.saveDataOnline) window.saveDataOnline(); } };
+        window.addToTrip = function(refId, originType) { const person = window.appData[originType].find(p => p.id === refId); if(!person) return; if(window.appData.trasfertaAttiva.some(t => t.refId === refId)) { alert("Già presente!"); return; } window.appData.trasfertaAttiva.push({ tripId: Date.now().toString() + Math.random().toString(), refId: refId, originType: originType, nome: person.nome, cognome: person.cognome, sesso: person.sesso, note: "", highlightColor: "", location: "" }); syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline(); };
+        
+        window.tripAction = function(tripId, action) { 
+            const index = window.appData.trasfertaAttiva.findIndex(t => t.tripId === tripId);
+            if(index === -1) return;
+            const item = window.appData.trasfertaAttiva[index];
+            if(action === 'delete') window.appData.trasfertaAttiva = window.appData.trasfertaAttiva.filter(t => t.tripId !== tripId);
+            else if (action === 'highlight') item.highlightColor = item.highlightColor === 'green' ? '' : 'green';
+            else if (action === 'note') item.note = prompt("Nota:", item.note) || item.note;
+            else if (action === 'pos') {
+                const currentPos = index + 1;
+                const newPosStr = prompt(`Sposta dalla posizione ${currentPos} alla posizione:`, currentPos);
+                if (newPosStr !== null) {
+                    const newPos = parseInt(newPosStr);
+                    const total = window.appData.trasfertaAttiva.length;
+                    if (!isNaN(newPos) && newPos >= 1 && newPos <= total) {
+                        const [movedItem] = window.appData.trasfertaAttiva.splice(index, 1);
+                        window.appData.trasfertaAttiva.splice(newPos - 1, 0, movedItem);
+                    } else alert(`Inserisci un numero valido tra 1 e ${total}`);
+                }
+            } 
+            else if (action === 'edit') { 
+                const nn = prompt("Modifica nome visualizzato:", item.nome + " " + item.cognome); 
+                if(nn) { const parts = nn.split(" "); if(parts.length>0) item.cognome = parts[0]; if(parts.length>1) item.nome = parts.slice(1).join(" "); } 
+            } 
+            syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline(); window.renderTrip();
+        };
+
+        window.closeTrip = function() { if(window.appData.trasfertaAttiva.length === 0) { alert("Lista vuota."); return; } if (window.appData.currentTripInfo && window.appData.currentTripInfo.name) { const idx = window.appData.archivioTrasferte.findIndex(a => String(a.id) === String(window.appData.currentTripInfo.id)); if(idx !== -1) { window.appData.archivioTrasferte[idx].list = JSON.parse(JSON.stringify(window.appData.trasfertaAttiva)); window.appData.archivioTrasferte[idx].count = window.appData.trasfertaAttiva.length; window.appData.archivioTrasferte[idx].date = new Date().toLocaleDateString(); alert("Salvata su esistente!"); } else window.createNewArchive(window.appData.currentTripInfo.name); } else { const name = prompt("Nome Trasferta:"); if(name) window.createNewArchive(name); else return; } window.appData.trasfertaAttiva = []; window.appData.currentTripInfo = null; if(window.saveDataOnline) window.saveDataOnline(); };
+        window.createNewArchive = function(name) { if(!window.appData.archivioTrasferte) window.appData.archivioTrasferte = []; window.appData.archivioTrasferte.push({ id: Date.now().toString(), name: name, date: new Date().toLocaleDateString(), count: window.appData.trasfertaAttiva.length, list: JSON.parse(JSON.stringify(window.appData.trasfertaAttiva)) }); };
+        window.restoreTrip = function(id) { if(window.appData.trasfertaAttiva.length > 0 && !confirm("Sovrascrivere attuale?")) return; const archive = window.appData.archivioTrasferte.find(a => String(a.id) === String(id)); if(archive) { window.appData.trasfertaAttiva = JSON.parse(JSON.stringify(archive.list)); window.appData.currentTripInfo = { id: archive.id, name: archive.name }; if(window.saveDataOnline) window.saveDataOnline(); alert("Caricata!"); } };
+        window.deleteArchive = function(id) { if(confirm("Eliminare definitivamente?")) { window.appData.archivioTrasferte = window.appData.archivioTrasferte.filter(a => String(a.id) !== String(id)); if(window.saveDataOnline) window.saveDataOnline(); } };
+        window.renameCurrentTrip = function() { const newName = prompt("Nome Trasferta:", window.appData.currentTripInfo?.name || ""); if (newName) { if (!window.appData.currentTripInfo) window.appData.currentTripInfo = { id: Date.now().toString(), name: "" }; window.appData.currentTripInfo.name = newName.trim(); syncToArchiveIfLinked(); if(window.saveDataOnline) window.saveDataOnline(); } };
+        
+        window.toggleExpiredSelection = function(id) { if(!window.appData.printExpired) window.appData.printExpired = []; if(window.appData.printExpired.includes(id)) { window.appData.printExpired = window.appData.printExpired.filter(item => item !== id); } else { window.appData.printExpired.push(id); } if(window.saveDataOnline) window.saveDataOnline(); window.renderTable('soci'); window.renderTable('accompagnatori'); updatePrintButtons(); };
+        window.toggleExpiringSelection = function(id) { if(!window.appData.printExpiring) window.appData.printExpiring = []; if(window.appData.printExpiring.includes(id)) { window.appData.printExpiring = window.appData.printExpiring.filter(item => item !== id); } else { window.appData.printExpiring.push(id); } if(window.saveDataOnline) window.saveDataOnline(); window.renderTable('soci'); window.renderTable('accompagnatori'); updatePrintButtons(); };
+        function updatePrintButtons() { const expiredList = window.appData.printExpired || []; const expiringList = window.appData.printExpiring || []; const btnExp = document.getElementById('btn-print-expired'); const countSpanExp = document.getElementById('expired-count'); if(expiredList.length > 0) { btnExp.style.display = 'inline-block'; countSpanExp.innerText = expiredList.length; } else { btnExp.style.display = 'none'; } const btnIng = document.getElementById('btn-print-expiring'); const countSpanIng = document.getElementById('expiring-count'); if(expiringList.length > 0) { btnIng.style.display = 'inline-block'; countSpanIng.innerText = expiringList.length; } else { btnIng.style.display = 'none'; } }
+        window.printExpiredPDF = function() { if(!window.appData.printExpired || window.appData.printExpired.length === 0) return; generateListPDF(window.appData.printExpired, "Elenco Tessere Scadute", [220, 53, 69]); };
+        window.printExpiringPDF = function() { if(!window.appData.printExpiring || window.appData.printExpiring.length === 0) return; generateListPDF(window.appData.printExpiring, "Tessere in Scadenza", [255, 193, 7]); };
+        function generateListPDF(idList, title, color) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); if(window.appData.customLogo) { try { doc.addImage(window.appData.customLogo, 'PNG', 14, 10, 25, 25); } catch(e){} } doc.setFontSize(16); doc.setTextColor(18, 47, 103); doc.text("CLUB NAPOLI PARTENOPEI MODENA", 45, 20); doc.setFontSize(14); doc.setTextColor(color[0], color[1], color[2]); doc.text(title, 45, 28); doc.setFontSize(10); doc.setTextColor(0); doc.text(`Data Stampa: ${new Date().toLocaleDateString()}`, 45, 34); const tableRows = []; const allMembers = [...(window.appData.soci || []), ...(window.appData.accompagnatori || [])]; idList.forEach(id => { const item = allMembers.find(m => m.id === id); if(item) { tableRows.push([ `${item.cognome} ${item.nome}`, formatDateIT(item.scadenza), item.tessera || '-' ]); } }); doc.autoTable({ head: [["Nominativo", "Scadenza", "Tessera"]], body: tableRows, startY: 40, theme: 'grid', headStyles: { fillColor: color } }); const stringaPdf = doc.output('bloburl'); window.open(stringaPdf, '_blank'); }
+        window.printArchiveTrip = function(id) { const trip = window.appData.archivioTrasferte.find(a => String(a.id) === String(id)); if(!trip) return; const rLimit = parseInt(prompt("Righe per pagina?", "20")) || 0; const fSize = parseInt(prompt("Font Size?", "10")) || 10; const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: "landscape" }); if(window.appData.customLogo) { try { doc.addImage(window.appData.customLogo, 'PNG', 14, 10, 25, 25); } catch(e){} } doc.setFontSize(16); doc.setTextColor(18, 47, 103); doc.text("CLUB NAPOLI PARTENOPEI MODENA", 45, 20); doc.setFontSize(14); doc.setTextColor(0); doc.text(`Trasferta: ${trip.name}`, 45, 28); doc.setFontSize(10); doc.text(`Data Archivio: ${trip.date} - Totale: ${trip.list.length}`, 45, 34); const tableRows = []; trip.list.forEach((item, index) => { let d = {}; if(item.originType === 'soci' && window.appData.soci) d = window.appData.soci.find(s => s.id === item.refId) || {}; else if(window.appData.accompagnatori) d = window.appData.accompagnatori.find(a => a.id === item.refId) || {}; let nameCell = `${item.cognome} ${item.nome}`; if(item.note) nameCell = `(NOTE: ${item.note})\n${nameCell}`; tableRows.push([ index + 1, nameCell, `${d.luogo||''} (${d.prov||''}) - ${formatDateIT(d.dataNascita)}`, `${d.residenza||''} (${d.provResidenza||''})`, d.cf||'', d.tessera||'-' ]); }); doc.autoTable({ head: [["#", "Nominativo", "Nascita", "Residenza", "CF", "Tessera"]], body: tableRows, startY: 45, theme: 'grid', headStyles: { fillColor: [18, 47, 103] }, styles: { fontSize: fSize }, didParseCell: function(data) { if (data.section === 'body' && trip.list[data.row.index].highlightColor === 'green') data.cell.styles.fillColor = [209, 231, 221]; } }); const stringaPdf = doc.output('bloburl'); window.open(stringaPdf, '_blank'); };
+        window.downloadSelfContained = function() { const dataJson = JSON.stringify(window.appData); let htmlContent = document.documentElement.outerHTML; const regex = /window\.appData = \{.*?\};/; const newInit = `window.appData = ${dataJson};`; htmlContent = htmlContent.replace(regex, newInit); const blob = new Blob([htmlContent], {type: 'text/html'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = "ClubNapoli_App.html"; document.body.appendChild(a); a.click(); document.body.removeChild(a); };
+        window.importLogo = function(input) { const file = input.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { window.appData.customLogo = e.target.result; document.getElementById('app-logo').src = window.appData.customLogo; updateAppIcons(window.appData.customLogo); if(window.saveDataOnline) window.saveDataOnline(); alert("Logo OK!"); }; reader.readAsDataURL(file); input.value = ''; };
+        window.exportData = function() { const a = document.createElement('a'); a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(window.appData)); a.download = "Backup.json"; document.body.appendChild(a); a.click(); a.remove(); };
+        window.importData = function(input) { const f = input.files[0]; if(!f) return; const r = new FileReader(); r.onload = e => { if(confirm("Confermi l'importazione? I dati verranno caricati online.")) { try { const parsed = JSON.parse(e.target.result); if(parsed) { window.appData = parsed; if(!window.appData.soci) window.appData.soci = []; if(!window.appData.accompagnatori) window.appData.accompagnatori = []; if(!window.appData.archivioTrasferte) window.appData.archivioTrasferte = []; if(!window.appData.printExpired) window.appData.printExpired = []; if(!window.appData.printExpiring) window.appData.printExpiring = []; if(window.saveDataOnline) window.saveDataOnline(); window.renderAll(); alert("Importazione completata!"); } } catch(err) { alert("Errore lettura file."); } } }; r.readAsText(f); input.value = ''; };
+        window.exportPDFSoci = function() { const doc = new window.jspdf.jsPDF({ orientation: "landscape" }); doc.text("CLUB NAPOLI PARTENOPEI MODENA - Lista Soci", 14, 15); if(!window.appData.soci) return; const rows = [...window.appData.soci].sort((a,b)=>a.cognome.localeCompare(b.cognome)).map((s,i) => [ i+1, `${s.cognome} ${s.nome}`, `${s.luogo} (${s.prov}) - ${formatDateIT(s.dataNascita)}`, `${s.residenza} (${s.provResidenza})`, s.cf, s.tessera ]); doc.autoTable({ head: [["#", "Nominativo", "Nascita", "Residenza", "CF", "Tessera"]], body: rows, startY: 20, styles: { fontSize: 9 } }); doc.save("Lista_Soci.pdf"); };
+        function syncToArchiveIfLinked() { if (window.appData.currentTripInfo && window.appData.currentTripInfo.id && window.appData.archivioTrasferte) { const index = window.appData.archivioTrasferte.findIndex(a => String(a.id) === String(window.appData.currentTripInfo.id)); if (index !== -1) { window.appData.archivioTrasferte[index].list = JSON.parse(JSON.stringify(window.appData.trasfertaAttiva)); window.appData.archivioTrasferte[index].count = window.appData.trasfertaAttiva.length; window.appData.archivioTrasferte[index].name = window.appData.currentTripInfo.name; window.appData.archivioTrasferte[index].date = new Date().toLocaleDateString(); } } }
     </script>
 </body>
 </html>
